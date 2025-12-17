@@ -4,54 +4,54 @@ import React from 'react';
 export const INTEGRATIONS_LIST = [
   {
     id: 'google-drive',
-    name: 'Google Drive Agent',
-    type: 'Storage',
+    name: 'Google Drive Asset',
+    type: 'STORAGE_NODE',
     icon: '📂',
     configFields: [
-      { label: 'Client ID', key: 'clientId', type: 'text', placeholder: 'Enter OAuth Client ID' },
+      { label: 'Client ID', key: 'clientId', type: 'text', placeholder: 'OAuth Client ID' },
       { label: 'Client Secret', key: 'clientSecret', type: 'password', placeholder: '••••••••' },
-      { label: 'Root Folder ID', key: 'folderId', type: 'text', placeholder: 'Optional specific folder' }
+      { label: 'Node Path', key: 'folderId', type: 'text', placeholder: 'Root Directory ID' }
     ]
   },
   {
     id: 'pontta',
-    name: 'Pontta CRM',
-    type: 'CRM',
-    icon: '📊',
+    name: 'Pontta Core',
+    type: 'CRM_NODE',
+    icon: '⚡',
     configFields: [
-      { label: 'API Key', key: 'apiKey', type: 'password', placeholder: 'Pontta API Token' },
-      { label: 'Base URL', key: 'baseUrl', type: 'text', placeholder: 'https://api.pontta.com/v1' }
+      { label: 'Security Token', key: 'apiKey', type: 'password', placeholder: 'Bearer API Token' },
+      { label: 'Endpoint Cluster', key: 'baseUrl', type: 'text', placeholder: 'https://api.pontta.cloud/v2' }
     ]
   },
   {
     id: 'slack',
-    name: 'Slack Worker',
-    type: 'Messaging',
+    name: 'Slack Internal',
+    type: 'NOTIF_NODE',
     icon: '💬',
     configFields: [
-      { label: 'Webhook URL', key: 'webhookUrl', type: 'text', placeholder: 'https://hooks.slack.com/...' }
+      { label: 'Hook URI', key: 'webhookUrl', type: 'text', placeholder: 'https://hooks.slack.com/services/...' }
     ]
   }
 ];
 
 export const MOCK_INPUT_JSON = {
-  customer: {
-    id: "CUST-12345",
-    fullName: "John Doe",
-    email: "john@example.com"
+  header: {
+    source: "EXTERNAL_CRM_01",
+    timestamp: 1715632000
   },
-  ticket: {
-    subject: "Problem with login",
-    priority: "high",
-    content: "I can't access my dashboard since last night."
+  payload: {
+    subject_id: "USER_88291",
+    label: "John Doe",
+    contact_point: "john.d@enterprise.com",
+    body: "Authentication failure on Node-4"
   }
 };
 
 export const MOCK_INTERNAL_SCHEMA = [
-  "user_id",
-  "user_name",
-  "user_contact",
-  "issue_title",
-  "issue_urgency",
-  "message_body"
+  "nexus_uid",
+  "client_label",
+  "client_origin",
+  "intent_class",
+  "severity_index",
+  "normalized_body"
 ];
