@@ -12,7 +12,7 @@ const CRM_TEMPLATES = [
 ];
 
 const CompanyManager: React.FC = () => {
-  const { companies, addCompany, activeCompany, globalSchema } = useApp();
+  const { companies, addCompany, activeCompany, globalSchema, outputTemplate } = useApp();
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState('');
   const [selectedCRM, setSelectedCRM] = useState<CRMType>('salesforce');
@@ -28,7 +28,8 @@ const CompanyManager: React.FC = () => {
       name: newName,
       color: randomColor,
       crmType: selectedCRM,
-      internalSchema: { ...globalSchema }, // Cada empresa começa com o padrão global
+      internalSchema: { ...globalSchema },
+      outputTemplate: { ...outputTemplate },
       crmConfig: {
         aiInstructions: `Instruções padrão para mapeamento do ${selectedCRM}...`,
         sourceJson: "{\n  \"example\": \"data\"\n}"
@@ -146,14 +147,6 @@ const CompanyManager: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex space-x-3">
-                 <motion.button 
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="p-3 bg-slate-800/50 rounded-xl text-slate-500 hover:text-blue-400 hover:bg-slate-800 transition-all border border-transparent hover:border-blue-500/20"
-                 >
-                   <Icons.Workflow />
-                 </motion.button>
               </div>
             </motion.div>
           ))}

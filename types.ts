@@ -22,6 +22,7 @@ export interface Company {
   color: string;
   crmType: CRMType;
   internalSchema?: any;
+  outputTemplate?: any;
   crmConfig?: {
     webhookUrl?: string;
     aiInstructions?: string;
