@@ -1,0 +1,8 @@
+{
+  "name": "NexusAI Orchestrator",
+  "description": "A high-performance frontend for multi-agent AI orchestration, featuring visual flow building, dynamic JSON mapping, and seamless integration management for enterprise customer service.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
