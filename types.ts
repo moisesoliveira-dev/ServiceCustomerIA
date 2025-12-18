@@ -104,3 +104,10 @@ export interface ExecutionLog {
   status: 'SUCCESS' | 'FAILURE' | 'RUNNING';
   steps: ExecutionStep[];
 }
+
+export interface UserPermission {
+  id: string;
+  user: string; // email
+  role: string;
+  scope: string;
+}

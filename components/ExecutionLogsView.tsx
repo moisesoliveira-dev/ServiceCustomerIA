@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { Badge, Card, SectionHeader } from './ui/Core';
 import { ExecutionLog, ExecutionStep } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
-// Fix: Added missing Icons import
 import { Icons } from './Icons';
 
 const MOCK_EXECUTIONS: ExecutionLog[] = [

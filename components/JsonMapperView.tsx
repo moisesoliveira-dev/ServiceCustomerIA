@@ -94,6 +94,7 @@ const JsonMapperView: React.FC = () => {
         contents: prompt,
         config: { responseMimeType: "application/json" }
       });
+      // FIX: The `text` property on `GenerateContentResponse` is a getter, not a method. Access it directly.
       setAiOutputPreview(response.text || "{}");
       setActiveTab('preview');
     } catch (e) { console.error(e); } finally { setIsLoading(false); }

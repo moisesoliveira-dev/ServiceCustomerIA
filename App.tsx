@@ -10,7 +10,8 @@ import ExecutionLogsView from './components/ExecutionLogsView';
 import OutputGeneratorView from './components/OutputGeneratorView';
 import GlobalSettingsView from './components/GlobalSettingsView';
 import CompanyManager from './components/CompanyManager';
-import { Company, EnvVar } from './types';
+import StateMonitor from './components/StateMonitor';
+import { Company, EnvVar, UserPermission } from './types';
 
 const DEFAULT_GLOBAL_SCHEMA = {
   "internal_id": "string",
@@ -19,7 +20,6 @@ const DEFAULT_GLOBAL_SCHEMA = {
   "metadata": { "source": "string" }
 };
 
-// Added missing default output template
 const DEFAULT_OUTPUT_TEMPLATE = {
   "status": "success",
   "result": {
@@ -32,12 +32,17 @@ interface AppContextType {
   companies: Company[];
   activeCompany: Company | null;
   globalVars: EnvVar[];
+  permissions: UserPermission[];
   setActiveCompanyById: (id: string | null) => void;
   updateCompany: (id: string, updates: Partial<Company>) => void;
   addCompany: (company: Company) => void;
   deleteCompany: (id: string) => void;
-  setGlobalVars: (vars: EnvVar[]) => void;
-  // Added missing members to AppContextType
+  addGlobalVar: (variable: Omit<EnvVar, 'id'>) => void;
+  updateGlobalVar: (id: string, updates: Partial<EnvVar>) => void;
+  deleteGlobalVar: (id: string) => void;
+  addPermission: (permission: Omit<UserPermission, 'id'>) => void;
+  updatePermission: (id: string, updates: Partial<UserPermission>) => void;
+  deletePermission: (id: string) => void;
   globalSchema: any;
   outputTemplate: any;
 }
@@ -64,10 +69,17 @@ const INITIAL_VARS: EnvVar[] = [
   { id: 'v2', key: 'ENCRYPTION_KEY', value: 'AKIA_NEXUS_8829', isSecret: true }
 ];
 
+const INITIAL_PERMISSIONS: UserPermission[] = [
+  { id: 'perm-1', user: 'admin@nexus.ai', role: 'MASTER_ADMIN', scope: 'GLOBAL' },
+  { id: 'perm-2', user: 'operator@nexus.ai', role: 'FLOW_DESIGNER', scope: 'TENANT_A' },
+  { id: 'perm-3', user: 'viewer@nexus.ai', role: 'AUDITOR', scope: 'GLOBAL_LOGS' }
+];
+
 export default function App() {
   const [companies, setCompanies] = useState<Company[]>(INITIAL_COMPANIES);
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(INITIAL_COMPANIES.length > 0 ? INITIAL_COMPANIES[0].id : null);
   const [globalVars, setGlobalVars] = useState<EnvVar[]>(INITIAL_VARS);
+  const [permissions, setPermissions] = useState<UserPermission[]>(INITIAL_PERMISSIONS);
 
   const activeCompany = companies.find(c => c.id === activeCompanyId) || null;
 
@@ -90,18 +102,43 @@ export default function App() {
     });
   };
 
+  const addGlobalVar = (variable: Omit<EnvVar, 'id'>) => {
+    setGlobalVars(prev => [...prev, { ...variable, id: `var-${Date.now()}` }]);
+  };
+  const updateGlobalVar = (id: string, updates: Partial<EnvVar>) => {
+    setGlobalVars(prev => prev.map(v => (v.id === id ? { ...v, ...updates } : v)));
+  };
+  const deleteGlobalVar = (id: string) => {
+    setGlobalVars(prev => prev.filter(v => v.id !== id));
+  };
+
+  const addPermission = (permission: Omit<UserPermission, 'id'>) => {
+    setPermissions(prev => [...prev, { ...permission, id: `perm-${Date.now()}` }]);
+  };
+  const updatePermission = (id: string, updates: Partial<UserPermission>) => {
+    setPermissions(prev => prev.map(p => (p.id === id ? { ...p, ...updates } : p)));
+  };
+  const deletePermission = (id: string) => {
+    setPermissions(prev => prev.filter(p => p.id !== id));
+  };
+
+
   return (
     <AppContext.Provider value={{ 
       companies, 
       activeCompany, 
       globalVars, 
-      // FIX: The context provider was missing the implementation for setActiveCompanyById. This assigns the state setter function to the context value.
+      permissions,
       setActiveCompanyById: setActiveCompanyId, 
       updateCompany, 
       addCompany, 
       deleteCompany,
-      setGlobalVars,
-      // Added missing context values
+      addGlobalVar,
+      updateGlobalVar,
+      deleteGlobalVar,
+      addPermission,
+      updatePermission,
+      deletePermission,
       globalSchema: DEFAULT_GLOBAL_SCHEMA,
       outputTemplate: DEFAULT_OUTPUT_TEMPLATE
     }}>
@@ -114,6 +151,7 @@ export default function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/companies" element={<CompanyManager />} />
                 <Route path="/flow" element={<FlowBuilder />} />
+                <Route path="/flow/monitor" element={<StateMonitor />} />
                 <Route path="/logs" element={<ExecutionLogsView />} />
                 <Route path="/mapping" element={<JsonMapperView />} />
                 <Route path="/output" element={<OutputGeneratorView />} />
