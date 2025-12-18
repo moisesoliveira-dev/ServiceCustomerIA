@@ -1,3 +1,4 @@
+"use client";
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -59,11 +60,10 @@ export const IconButton: React.FC<{ icon: React.ReactNode; onClick?: () => void;
     whileHover={{ scale: 1.1 }}
     whileTap={{ scale: 0.9 }}
     onClick={onClick}
-    className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
-      active 
-        ? `bg-${color}-500/10 border-${color}-500/30 text-${color}-400` 
+    className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${active
+        ? `bg-${color}-500/10 border-${color}-500/30 text-${color}-400`
         : 'bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300'
-    }`}
+      }`}
   >
     {icon}
   </motion.button>
@@ -74,7 +74,7 @@ export const Pagination: React.FC<{ currentPage: number; totalPages: number; onP
 
   return (
     <div className="mt-10 flex justify-center items-center space-x-2">
-      <button 
+      <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-bold disabled:opacity-30"
@@ -82,7 +82,7 @@ export const Pagination: React.FC<{ currentPage: number; totalPages: number; onP
         Anterior
       </button>
       {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-        <button 
+        <button
           key={page}
           onClick={() => onPageChange(page)}
           className={`w-8 h-8 rounded-lg text-xs font-bold transition-colors ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-slate-800 hover:bg-slate-700'}`}
@@ -90,7 +90,7 @@ export const Pagination: React.FC<{ currentPage: number; totalPages: number; onP
           {page}
         </button>
       ))}
-      <button 
+      <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-bold disabled:opacity-30"
@@ -102,7 +102,7 @@ export const Pagination: React.FC<{ currentPage: number; totalPages: number; onP
 };
 
 
-export const ConfirmationModal: React.FC<{ 
+export const ConfirmationModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -112,10 +112,10 @@ export const ConfirmationModal: React.FC<{
   <AnimatePresence>
     {isOpen && (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }} 
-          animate={{ opacity: 1, scale: 1 }} 
-          exit={{ opacity: 0, scale: 0.9 }} 
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
           className="bg-slate-900 border border-slate-800 rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
         >
           <h2 className="text-lg font-bold text-white">{title}</h2>

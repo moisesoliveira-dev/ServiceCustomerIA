@@ -1,8 +1,9 @@
+"use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useApp } from '../App';
-import { Company, CRMType } from '../types';
+import { useApp } from '@/context/AppContext';
+import { Company, CRMType } from '@/types';
 import { Icons } from './Icons';
 import { Pagination, ConfirmationModal } from './ui/Core';
 
@@ -67,9 +68,8 @@ const CompanyFormModal: React.FC<{
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedCRM(crm.id as CRMType)}
-                  className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center space-y-3 ${
-                    selectedCRM === crm.id ? 'border-blue-500 bg-blue-500/5' : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800'
-                  }`}
+                  className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center space-y-3 ${selectedCRM === crm.id ? 'border-blue-500 bg-blue-500/5' : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800'
+                    }`}
                 >
                   <span className="text-2xl">{crm.icon}</span>
                   <span className="text-[12px] font-black uppercase text-slate-400">{crm.name}</span>
@@ -140,15 +140,15 @@ const CompanyManager: React.FC = () => {
   const [deletingCompany, setDeletingCompany] = useState<Company | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const handleSave = ({ name, crmType }: { name: string; crmType: CRMType }) => {
     if (!name || !formOpenFor) return;
-    
+
     if (formOpenFor === 'new') {
       const newId = `comp-${Date.now()}`;
       const colors = ['bg-blue-600', 'bg-emerald-600', 'bg-indigo-600', 'bg-rose-600', 'bg-amber-600'];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      
+
       addCompany({
         id: newId, name, color: randomColor, crmType,
         internalSchema: { ...globalSchema },
@@ -201,7 +201,7 @@ const CompanyManager: React.FC = () => {
         <motion.div layout className="grid gap-6 items-start">
           <AnimatePresence>
             {paginatedCompanies.map((comp) => (
-              <CompanyListItem 
+              <CompanyListItem
                 key={comp.id}
                 company={comp}
                 isActive={comp.id === activeCompany?.id}
@@ -211,7 +211,7 @@ const CompanyManager: React.FC = () => {
             ))}
           </AnimatePresence>
         </motion.div>
-        
+
         {filteredCompanies.length === 0 && (
           <div className="text-center py-20 min-h-[360px] flex flex-col justify-center">
             <p className="text-slate-500 font-bold">{searchQuery ? `Nenhuma empresa encontrada para "${searchQuery}"` : "Nenhuma empresa cadastrada."}</p>

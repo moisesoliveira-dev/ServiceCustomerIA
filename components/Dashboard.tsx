@@ -1,3 +1,4 @@
+"use client";
 
 import React from 'react';
 import { Badge, Card, SectionHeader } from './ui/Core';
@@ -54,10 +55,10 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex-1 p-10 pb-20 bg-[#0b1120] overflow-y-auto custom-scrollbar">
       <div className="max-w-6xl mx-auto">
-        <SectionHeader 
-          title="Nexus Command Center" 
-          subtitle="Monitoring real-time AI orchestration throughput" 
-          action={<Badge color="emerald" pulse>All Systems Operational</Badge>} 
+        <SectionHeader
+          title="Nexus Command Center"
+          subtitle="Monitoring real-time AI orchestration throughput"
+          action={<Badge color="emerald" pulse>All Systems Operational</Badge>}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">

@@ -1,6 +1,6 @@
+"use client";
 
 import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import ReactFlow, {
   Background,
   Controls,
@@ -20,8 +20,8 @@ import ReactFlow, {
   useReactFlow,
 } from 'reactflow';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NodeType } from '../types';
-import { INTEGRATIONS_LIST } from '../constants';
+import { NodeType } from '@/types';
+import { INTEGRATIONS_LIST } from '@/constants';
 import { Icons } from './Icons';
 import { NodeConfigModal } from './ui/NodeConfigModal';
 
@@ -75,23 +75,21 @@ const NexusNode: React.FC<NodeProps> = ({ id, data, isConnectable, selected }) =
         )}
       </AnimatePresence>
 
-      <div className={`p-4 flex items-center justify-between rounded-t-3xl border-b ${
-          isWorker ? 'bg-indigo-500/10 border-indigo-500/20' : 'bg-blue-500/5 border-blue-500/10'
-      }`}>
+      <div className={`p-4 flex items-center justify-between rounded-t-3xl border-b ${isWorker ? 'bg-indigo-500/10 border-indigo-500/20' : 'bg-blue-500/5 border-blue-500/10'
+        }`}>
         <div className="flex items-center space-x-3">
-          <div className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${
-            isWorker ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
-          }`}>
+          <div className={`w-10 h-10 flex items-center justify-center rounded-xl border transition-all ${isWorker ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+            }`}>
             {getNodeIcon(nodeType, data.icon)}
           </div>
           <h4 className="text-sm font-bold text-slate-100 truncate">{data.label}</h4>
         </div>
         <div className="flex items-center space-x-2">
-            <motion.div
-              animate={{ opacity: isConnected ? [1, 0.5, 1] : 1 }}
-              transition={{ repeat: Infinity, duration: 2.5 }}
-              className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 shadow-[0_0_12px_#22c55e]' : 'bg-slate-700'}`}
-            />
+          <motion.div
+            animate={{ opacity: isConnected ? [1, 0.5, 1] : 1 }}
+            transition={{ repeat: Infinity, duration: 2.5 }}
+            className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 shadow-[0_0_12px_#22c55e]' : 'bg-slate-700'}`}
+          />
         </div>
       </div>
 
@@ -115,55 +113,55 @@ const NexusNode: React.FC<NodeProps> = ({ id, data, isConnectable, selected }) =
 };
 
 const LibrarySidebar: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredIntegrations = useMemo(() => {
-        return INTEGRATIONS_LIST.filter(item => 
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [searchTerm]);
-
-    const onDragStart = (event: React.DragEvent, integration: any) => {
-        const integrationData = JSON.stringify(integration);
-        event.dataTransfer.setData('application/reactflow-integration', integrationData);
-        event.dataTransfer.effectAllowed = 'move';
-    };
-
-    return (
-        <aside className="w-80 bg-slate-950/40 border-r border-white/5 flex flex-col shrink-0">
-            <div className="p-6 border-b border-white/5">
-                <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Agent Library</h3>
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Buscar módulo..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-slate-900/50 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30"
-                    />
-                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600">
-                        <Icons.Search />
-                    </div>
-                </div>
-            </div>
-            <div className="flex-1 p-4 space-y-3 overflow-y-auto custom-scrollbar">
-                {filteredIntegrations.map((item) => (
-                    <div
-                        key={item.id}
-                        onDragStart={(event) => onDragStart(event, item)}
-                        draggable
-                        className="w-full group flex items-center p-4 rounded-2xl border border-slate-800/60 bg-slate-900/50 hover:bg-indigo-500/10 transition-all text-left cursor-grab"
-                    >
-                        <div className="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-xl text-xl mr-4 border border-slate-800">{item.icon}</div>
-                        <div className="flex-1">
-                            <p className="text-xs font-bold text-slate-100">{item.name}</p>
-                            <p className="text-[11px] text-slate-600 font-black uppercase tracking-widest">{item.type.split('_')[0]}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </aside>
+  const filteredIntegrations = useMemo(() => {
+    return INTEGRATIONS_LIST.filter(item =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+  }, [searchTerm]);
+
+  const onDragStart = (event: React.DragEvent, integration: any) => {
+    const integrationData = JSON.stringify(integration);
+    event.dataTransfer.setData('application/reactflow-integration', integrationData);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  return (
+    <aside className="w-80 bg-slate-950/40 border-r border-white/5 flex flex-col shrink-0">
+      <div className="p-6 border-b border-white/5">
+        <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Agent Library</h3>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Buscar módulo..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-slate-900/50 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30"
+          />
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600">
+            <Icons.Search />
+          </div>
+        </div>
+      </div>
+      <div className="flex-1 p-4 space-y-3 overflow-y-auto custom-scrollbar">
+        {filteredIntegrations.map((item) => (
+          <div
+            key={item.id}
+            onDragStart={(event) => onDragStart(event, item)}
+            draggable
+            className="w-full group flex items-center p-4 rounded-2xl border border-slate-800/60 bg-slate-900/50 hover:bg-indigo-500/10 transition-all text-left cursor-grab"
+          >
+            <div className="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-xl text-xl mr-4 border border-slate-800">{item.icon}</div>
+            <div className="flex-1">
+              <p className="text-xs font-bold text-slate-100">{item.name}</p>
+              <p className="text-[11px] text-slate-600 font-black uppercase tracking-widest">{item.type.split('_')[0]}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </aside>
+  );
 };
 
 
@@ -193,7 +191,7 @@ const FlowBuilderComponent: React.FC = () => {
     setNodes(initialNodes);
     setEdges(initialEdges);
   }, []);
-  
+
   useEffect(() => {
     if (showSuccessModal) {
       const timer = setTimeout(() => setShowSuccessModal(false), 3000);
@@ -214,16 +212,16 @@ const FlowBuilderComponent: React.FC = () => {
     if ((sourceIsWorker && !targetIsRouter) || (targetIsWorker && !sourceIsRouter)) {
       return; // Invalid connection
     }
-    
+
     if (targetIsWorker && sourceIsRouter) {
       setNodes(nds => nds.map(n => n.id === targetNode.id ? { ...n, data: { ...n.data, connected: true } } : n));
     }
-    
+
     const isAgentEdge = sourceIsWorker || targetIsWorker;
-    const newEdge = { 
-      ...params, 
-      className: isAgentEdge ? 'edge-agent-glow' : 'edge-core-dashed', 
-      markerEnd: { type: MarkerType.ArrowClosed, color: isAgentEdge ? '#6366f1' : '#3b82f6' } 
+    const newEdge = {
+      ...params,
+      className: isAgentEdge ? 'edge-agent-glow' : 'edge-core-dashed',
+      markerEnd: { type: MarkerType.ArrowClosed, color: isAgentEdge ? '#6366f1' : '#3b82f6' }
     };
     setEdges((eds) => addEdge(newEdge, eds));
   }, [nodes, setNodes, setEdges]);
@@ -240,21 +238,21 @@ const FlowBuilderComponent: React.FC = () => {
     const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
     const integrationData = event.dataTransfer.getData('application/reactflow-integration');
     if (!integrationData) return;
-    
+
     const integration = JSON.parse(integrationData);
     const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
     });
 
     const newNode: Node = {
       id: `agent-${integration.id}-${Date.now()}`,
       type: 'nexusNode',
       position,
-      data: { 
-        label: integration.name, 
-        icon: integration.icon, 
-        nodeType: NodeType.AGENT_WORKER, 
+      data: {
+        label: integration.name,
+        icon: integration.icon,
+        nodeType: NodeType.AGENT_WORKER,
         connected: false,
         providerId: integration.id,
         config: {}
@@ -263,7 +261,7 @@ const FlowBuilderComponent: React.FC = () => {
 
     setNodes((nds) => nds.concat(newNode));
   }, [reactFlowInstance, setNodes]);
-  
+
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     const target = event.target as HTMLElement;
     if (target.closest('.node-settings-button')) {
@@ -283,7 +281,7 @@ const FlowBuilderComponent: React.FC = () => {
     );
     setEditingNode(null);
   };
-  
+
   const handleDeploy = () => {
     setIsDeploying(true);
     setTimeout(() => {
@@ -302,7 +300,7 @@ const FlowBuilderComponent: React.FC = () => {
         <header className="h-20 border-b border-white/5 bg-slate-950/40 backdrop-blur-2xl px-8 flex items-center justify-between z-10 shrink-0">
           <div className="flex items-center space-x-6">
             <motion.div whileHover={{ rotate: 15 }} className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-blue-500 shadow-inner">
-               <Icons.Workflow />
+              <Icons.Workflow />
             </motion.div>
             <div>
               <h2 className="text-lg font-bold text-white tracking-tight leading-none">Flow Orchestrator</h2>
@@ -310,9 +308,9 @@ const FlowBuilderComponent: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <motion.button 
-              whileHover={{ scale: 1.05 }} 
-              whileTap={{ scale: 0.95 }} 
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleDeploy}
               disabled={isDeploying}
               className="px-6 py-2.5 text-xs font-black bg-blue-600 text-white rounded-xl shadow-xl shadow-blue-600/20 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"

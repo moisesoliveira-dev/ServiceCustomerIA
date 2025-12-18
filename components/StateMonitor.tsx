@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useState } from 'react';
 
@@ -49,7 +50,7 @@ const StageIndicator: React.FC<{ current: string; stage: string; label: string; 
   const stagesOrder = ['INPUT', 'MANAGER', 'ROUTER', 'WORKER', 'OUTPUT', 'COMPLETE'];
   const currentIndex = stagesOrder.indexOf(current);
   const stageIndex = stagesOrder.indexOf(stage);
-  
+
   const isPast = stageIndex < currentIndex;
   const isCurrent = stageIndex === currentIndex;
   const isError = isCurrent && status === 'error';
@@ -58,9 +59,9 @@ const StageIndicator: React.FC<{ current: string; stage: string; label: string; 
     <div className="flex flex-col items-center flex-1 relative">
       <div className={`
         w-10 h-10 rounded-full border-2 flex items-center justify-center z-10 transition-all duration-500
-        ${isPast ? 'bg-blue-600 border-blue-600 text-white' : 
-          isCurrent ? (isError ? 'bg-rose-500 border-rose-500 text-white animate-pulse' : 'bg-blue-600 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]') : 
-          'bg-slate-900 border-slate-800 text-slate-600'}
+        ${isPast ? 'bg-blue-600 border-blue-600 text-white' :
+          isCurrent ? (isError ? 'bg-rose-500 border-rose-500 text-white animate-pulse' : 'bg-blue-600 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]') :
+            'bg-slate-900 border-slate-800 text-slate-600'}
       `}>
         {isPast ? (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
@@ -95,9 +96,9 @@ const StateMonitor: React.FC = () => {
         {/* Sessions Sidebar */}
         <div className="w-80 border-r border-slate-800 overflow-y-auto bg-slate-900/10 shrink-0">
           <div className="p-4 border-b border-slate-800 bg-slate-900/30">
-            <input 
-              type="text" 
-              placeholder="Search sessions..." 
+            <input
+              type="text"
+              placeholder="Search sessions..."
               className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600/50"
             />
           </div>
@@ -196,11 +197,11 @@ const StateMonitor: React.FC = () => {
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-slate-700">
-               <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-               </div>
-               <p className="text-lg font-medium">Select a session to monitor its journey</p>
-               <p className="text-sm mt-2 opacity-50">Real-time data stream will appear here</p>
+              <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+              <p className="text-lg font-medium">Select a session to monitor its journey</p>
+              <p className="text-sm mt-2 opacity-50">Real-time data stream will appear here</p>
             </div>
           )}
         </div>

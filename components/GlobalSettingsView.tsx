@@ -1,9 +1,10 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../App';
+import { useApp } from '@/context/AppContext';
 import { Badge, Card, SectionHeader, ConfirmationModal } from './ui/Core';
 import { motion, AnimatePresence } from 'framer-motion';
-import { EnvVar, UserPermission } from '../types';
+import { EnvVar, UserPermission } from '@/types';
 import { Icons } from './Icons';
 
 // --- MODAL COMPONENTS ---
@@ -131,8 +132,8 @@ const EnvVarsTab: React.FC<{ onAdd: () => void; onEdit: (v: EnvVar) => void; onD
               </div>
               <div className="flex items-center space-x-3 opacity-0 group-hover:opacity-100 transition-opacity">
                 {v.isSecret && <Badge color="amber">SECRET</Badge>}
-                <button onClick={() => onEdit(v)} className="p-2 text-slate-500 hover:text-blue-400"><Icons.Edit/></button>
-                <button onClick={() => onDelete(v)} className="p-2 text-slate-500 hover:text-rose-400"><Icons.Trash/></button>
+                <button onClick={() => onEdit(v)} className="p-2 text-slate-500 hover:text-blue-400"><Icons.Edit /></button>
+                <button onClick={() => onDelete(v)} className="p-2 text-slate-500 hover:text-rose-400"><Icons.Trash /></button>
               </div>
             </div>
           ))}
@@ -171,8 +172,8 @@ const RbacTab: React.FC<{ onAdd: () => void; onEdit: (p: UserPermission) => void
               <div className="flex items-center space-x-3">
                 <Badge color={p.role.includes('ADMIN') ? 'blue' : 'slate'}>{p.role}</Badge>
                 <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => onEdit(p)} className="p-2 text-slate-500 hover:text-blue-400"><Icons.Edit/></button>
-                  <button onClick={() => onDelete(p)} className="p-2 text-slate-500 hover:text-rose-400"><Icons.Trash/></button>
+                  <button onClick={() => onEdit(p)} className="p-2 text-slate-500 hover:text-blue-400"><Icons.Edit /></button>
+                  <button onClick={() => onDelete(p)} className="p-2 text-slate-500 hover:text-rose-400"><Icons.Trash /></button>
                 </div>
               </div>
             </div>
@@ -207,7 +208,7 @@ const SystemHealthTab: React.FC = () => (
 const GlobalSettingsView: React.FC = () => {
   const { addGlobalVar, updateGlobalVar, deleteGlobalVar, addPermission, updatePermission, deletePermission } = useApp();
   const [activeTab, setActiveTab] = useState<'env' | 'rbac' | 'system'>('env');
-  
+
   const [envModal, setEnvModal] = useState<{ open: boolean; mode: 'new' | 'edit'; data?: EnvVar }>({ open: false, mode: 'new' });
   const [permModal, setPermModal] = useState<{ open: boolean; mode: 'new' | 'edit'; data?: UserPermission }>({ open: false, mode: 'new' });
   const [deletingItem, setDeletingItem] = useState<{ type: 'env' | 'perm'; data: any } | null>(null);
@@ -249,12 +250,12 @@ const GlobalSettingsView: React.FC = () => {
           {activeTab === 'system' && <SystemHealthTab />}
         </div>
       </div>
-      
+
       <AnimatePresence>
         {envModal.open && <EnvVarModal mode={envModal.mode} initialData={envModal.data} onSave={handleSaveEnv} onClose={() => setEnvModal({ ...envModal, open: false })} />}
         {permModal.open && <PermissionModal mode={permModal.mode} initialData={permModal.data} onSave={handleSavePerm} onClose={() => setPermModal({ ...permModal, open: false })} />}
       </AnimatePresence>
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={!!deletingItem}
         onClose={() => setDeletingItem(null)}
         onConfirm={confirmDelete}

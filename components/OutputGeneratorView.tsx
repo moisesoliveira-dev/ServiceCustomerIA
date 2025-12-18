@@ -1,11 +1,12 @@
+"use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useApp } from '../App';
+import { useApp } from '@/context/AppContext';
 import { Badge, Card, CodeEditor, SectionHeader } from './ui/Core';
-import { OutputRoute, Header, OutputExecution } from '../types';
+import { OutputRoute, Header, OutputExecution } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from './Icons';
-import { INTEGRATIONS_LIST } from '../constants';
+import { INTEGRATIONS_LIST } from '@/constants';
 
 const AVAILABLE_VARIABLES = [
   { key: '{{conversation.id}}', description: 'ID Único da Sessão' },
@@ -25,9 +26,7 @@ const OutputGeneratorView: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
 
-  if (!activeCompany) return null;
-
-  const routes = activeCompany.outputRoutes || [];
+  const routes = activeCompany?.outputRoutes || [];
 
   const filteredRoutes = useMemo(() => {
     if (!searchTerm) return routes;
@@ -46,14 +45,16 @@ const OutputGeneratorView: React.FC = () => {
     acc[groupName].push(route);
     return acc;
   }, {} as Record<string, OutputRoute[]>), [filteredRoutes]);
-  
+
   useEffect(() => {
     if (searchTerm) {
       setExpandedGroups(Object.keys(groupedRoutes).reduce((acc, key) => ({ ...acc, [key]: true }), {}));
     } else {
       setExpandedGroups({});
     }
-  }, [searchTerm]);
+  }, [searchTerm, groupedRoutes]);
+
+  if (!activeCompany) return null;
 
   const toggleGroup = (groupName: string) => {
     setExpandedGroups(prev => ({ ...prev, [groupName]: !prev[groupName] }));
@@ -79,7 +80,7 @@ const OutputGeneratorView: React.FC = () => {
     const newRoutes = routes.find(r => r.id === editingRoute.id)
       ? routes.map(r => r.id === editingRoute.id ? editingRoute : r)
       : [...routes, editingRoute];
-    
+
     updateCompany(activeCompany.id, { outputRoutes: newRoutes });
     setEditingRoute(null);
     setSimulationResult(null);
@@ -88,7 +89,7 @@ const OutputGeneratorView: React.FC = () => {
   const runSimulation = () => {
     if (!editingRoute) return;
     setIsSimulating(true);
-    
+
     let interpolatedBody = editingRoute.bodyTemplate;
     AVAILABLE_VARIABLES.forEach(v => {
       interpolatedBody = interpolatedBody.replace(new RegExp(v.key.replace(/\{\{/g, '{{\\s*').replace(/}}/g, '\\s*}}'), 'g'), `"Valor_Exemplo_${v.key.split('.')[1].replace('}}', '')}"`);
@@ -113,8 +114,8 @@ const OutputGeneratorView: React.FC = () => {
 
   return (
     <div className="flex-1 px-10 pt-10 pb-20 bg-[#02040a] overflow-y-auto custom-scrollbar">
-      <SectionHeader 
-        title="Output Routes" 
+      <SectionHeader
+        title="Output Routes"
         subtitle="Gerenciamento de webhooks e egress de dados com injeção dinâmica de variáveis"
       />
 
@@ -124,7 +125,7 @@ const OutputGeneratorView: React.FC = () => {
             <input type="text" placeholder="Buscar rotas..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full bg-slate-900/50 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-xs text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30" />
             <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"><Icons.Search /></div>
           </div>
-          
+
           {Object.keys(groupedRoutes).length > 0 ? (
             Object.entries(groupedRoutes).map(([groupName, groupRoutes]) => (
               <div key={groupName} className="bg-slate-900/20 rounded-2xl p-2">
@@ -136,7 +137,7 @@ const OutputGeneratorView: React.FC = () => {
                   </button>
                   <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => handleAddNewRouteToGroup(groupName)} className="w-8 h-8 flex items-center justify-center bg-blue-600/10 text-blue-400 rounded-lg hover:bg-blue-600/20"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 6v12m6-6H6"></path></svg></motion.button>
                 </div>
-                
+
                 <AnimatePresence>
                   {expandedGroups[groupName] && (
                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="pl-6 pt-2 space-y-2 overflow-hidden">
@@ -178,21 +179,21 @@ const OutputGeneratorView: React.FC = () => {
                         <div className="space-y-6">
                           <div>
                             <label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Route Name</label>
-                            <input type="text" value={editingRoute.name} onChange={e => setEditingRoute({...editingRoute, name: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white" placeholder="Ex: Notify Slack Channel" />
+                            <input type="text" value={editingRoute.name} onChange={e => setEditingRoute({ ...editingRoute, name: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white" placeholder="Ex: Notify Slack Channel" />
                           </div>
                           <div className="flex gap-4">
-                            <div className="w-28"><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Method</label><select value={editingRoute.method} onChange={e => setEditingRoute({...editingRoute, method: e.target.value as any})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"><option>POST</option><option>PUT</option><option>GET</option></select></div>
-                            <div className="flex-1"><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Target URL</label><input type="text" value={editingRoute.url} onChange={e => setEditingRoute({...editingRoute, url: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-blue-400 font-mono" placeholder="https://api.empresa.com/hooks/nexus" /></div>
+                            <div className="w-28"><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Method</label><select value={editingRoute.method} onChange={e => setEditingRoute({ ...editingRoute, method: e.target.value as any })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"><option>POST</option><option>PUT</option><option>GET</option></select></div>
+                            <div className="flex-1"><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Target URL</label><input type="text" value={editingRoute.url} onChange={e => setEditingRoute({ ...editingRoute, url: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-blue-400 font-mono" placeholder="https://api.empresa.com/hooks/nexus" /></div>
                           </div>
-                          <div><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Group (Node)</label><select value={editingRoute.group || ''} onChange={e => setEditingRoute({...editingRoute, group: e.target.value})} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"><option value="">General</option>{INTEGRATIONS_LIST.map(integration => (<option key={integration.id} value={integration.name}>{integration.name}</option>))}</select></div>
-                          <div className="h-64 flex flex-col"><label className="text-[11px] font-black text-slate-600 uppercase mb-2 block">Body Template (JSON)</label><CodeEditor label="Dynamic Body" value={editingRoute.bodyTemplate} onChange={val => setEditingRoute({...editingRoute, bodyTemplate: val})} /></div>
+                          <div><label className="text-[11px] font-black text-slate-600 uppercase mb-1 block">Group (Node)</label><select value={editingRoute.group || ''} onChange={e => setEditingRoute({ ...editingRoute, group: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white"><option value="">General</option>{INTEGRATIONS_LIST.map(integration => (<option key={integration.id} value={integration.name}>{integration.name}</option>))}</select></div>
+                          <div className="h-64 flex flex-col"><label className="text-[11px] font-black text-slate-600 uppercase mb-2 block">Body Template (JSON)</label><CodeEditor label="Dynamic Body" value={editingRoute.bodyTemplate} onChange={val => setEditingRoute({ ...editingRoute, bodyTemplate: val })} /></div>
                           <div className="flex justify-between items-center pt-4"><button onClick={runSimulation} disabled={isSimulating} className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[12px] font-black uppercase tracking-widest rounded-xl transition-all">{isSimulating ? 'Sending Request...' : 'Simular Request'}</button><div className="flex gap-2"><button onClick={() => setEditingRoute(null)} className="px-4 text-[12px] font-bold text-slate-500">Cancel</button><button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white text-[12px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-blue-600/20">Save Route</button></div></div>
                         </div>
                       </Card>
                       {simulationResult && (<motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}><Card className="border-emerald-500/20 bg-emerald-500/[0.02]"><div className="flex justify-between items-center mb-4"><span className="text-[12px] font-black text-emerald-500 uppercase tracking-widest">Simulation Success</span><Badge color="emerald">HTTP {simulationResult.status} OK</Badge></div><div className="grid grid-cols-2 gap-4 font-mono text-[12px]"><div><p className="text-slate-600 mb-1 uppercase">Sent Payload:</p><pre className="p-3 bg-slate-950 rounded-lg text-blue-400 overflow-auto max-h-32">{JSON.stringify(simulationResult.payload, null, 2)}</pre></div><div><p className="text-slate-600 mb-1 uppercase">Remote Response:</p><pre className="p-3 bg-slate-950 rounded-lg text-emerald-400 overflow-auto max-h-32">{JSON.stringify(simulationResult.response, null, 2)}</pre></div></div></Card></motion.div>)}
                     </div>
                     <div className="space-y-6">
-                      <div className="bg-slate-900/40 border border-slate-800 rounded-[2rem] p-6"><h4 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Variable Assistant</h4><div className="space-y-3">{AVAILABLE_VARIABLES.map(v => (<button key={v.key} onClick={() => { const newBody = editingRoute.bodyTemplate.trim().slice(0, -1) + `\n  "key": "${v.key}"\n}`; setEditingRoute({...editingRoute, bodyTemplate: newBody }); }} className="w-full p-3 bg-slate-950 border border-white/5 rounded-xl text-left hover:border-blue-500/50 transition-all group"><code className="text-[12px] text-blue-400 font-bold block mb-1 group-hover:text-blue-300">{v.key}</code><span className="text-[11px] text-slate-600 uppercase font-black">{v.description}</span></button>))}</div></div>
+                      <div className="bg-slate-900/40 border border-slate-800 rounded-[2rem] p-6"><h4 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Variable Assistant</h4><div className="space-y-3">{AVAILABLE_VARIABLES.map(v => (<button key={v.key} onClick={() => { const newBody = editingRoute.bodyTemplate.trim().slice(0, -1) + `\n  "key": "${v.key}"\n}`; setEditingRoute({ ...editingRoute, bodyTemplate: newBody }); }} className="w-full p-3 bg-slate-950 border border-white/5 rounded-xl text-left hover:border-blue-500/50 transition-all group"><code className="text-[12px] text-blue-400 font-bold block mb-1 group-hover:text-blue-300">{v.key}</code><span className="text-[11px] text-slate-600 uppercase font-black">{v.description}</span></button>))}</div></div>
                       <div className="p-6 bg-amber-500/5 border border-amber-500/10 rounded-[2rem]"><p className="text-[11px] text-amber-500/60 font-black uppercase leading-relaxed tracking-wider">Use chaves duplas para injetar dados processados pela IA ou metadados de sistema.</p></div>
                     </div>
                   </div>
@@ -202,9 +203,9 @@ const OutputGeneratorView: React.FC = () => {
               </motion.div>
             ) : (
               <div className="h-full flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-[3rem] bg-slate-900/10 py-32">
-                 <div className="w-16 h-16 bg-slate-950 border border-white/5 rounded-3xl flex items-center justify-center text-slate-700 mb-6"><Icons.Output /></div>
-                 <p className="text-[12px] font-black text-slate-600 uppercase tracking-[0.3em]">Select or Create an Output Route</p>
-                 <p className="text-[11px] text-slate-700 font-bold uppercase mt-2">Configure para onde a IA deve enviar os resultados finais</p>
+                <div className="w-16 h-16 bg-slate-950 border border-white/5 rounded-3xl flex items-center justify-center text-slate-700 mb-6"><Icons.Output /></div>
+                <p className="text-[12px] font-black text-slate-600 uppercase tracking-[0.3em]">Select or Create an Output Route</p>
+                <p className="text-[11px] text-slate-700 font-bold uppercase mt-2">Configure para onde a IA deve enviar os resultados finais</p>
               </div>
             )}
           </AnimatePresence>

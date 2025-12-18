@@ -1,6 +1,7 @@
+"use client";
 
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../App';
+import { useApp } from '@/context/AppContext';
 import { GoogleGenAI } from "@google/genai";
 import { Icons } from './Icons';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -45,7 +46,7 @@ const JsonMapperView: React.FC = () => {
   const [aiOutputPreview, setAiOutputPreview] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAdminMode, setIsAdminMode] = useState(false);
-  
+
   const [tempIngestion, setTempIngestion] = useState("");
   const [tempOutput, setTempOutput] = useState("");
   const [schemaError, setSchemaError] = useState<string | null>(null);
@@ -54,7 +55,7 @@ const JsonMapperView: React.FC = () => {
   const currentIngestion = activeCompany?.internalSchema || globalSchema;
   const currentOutput = activeCompany?.outputTemplate || outputTemplate;
 
-  useEffect(() => { 
+  useEffect(() => {
     setTempIngestion(JSON.stringify(currentIngestion, null, 2));
     setTempOutput(JSON.stringify(currentOutput, null, 2));
   }, [activeCompany?.id, currentIngestion, currentOutput]);
@@ -65,13 +66,13 @@ const JsonMapperView: React.FC = () => {
     try {
       const ingestion = JSON.parse(tempIngestion);
       const output = JSON.parse(tempOutput);
-      updateCompany(activeCompany.id, { 
+      updateCompany(activeCompany.id, {
         internalSchema: ingestion,
         outputTemplate: output
       });
       setIsAdminMode(false);
-    } catch (e: any) { 
-      setSchemaError("Erro de Sintaxe JSON: " + e.message); 
+    } catch (e: any) {
+      setSchemaError("Erro de Sintaxe JSON: " + e.message);
     }
   };
 
@@ -111,45 +112,45 @@ const JsonMapperView: React.FC = () => {
         {activeTab === 'config' ? (
           <>
             <div className="flex-1 flex flex-col space-y-6 pb-10">
-              <CodeEditor 
-                label={`Payload Exemplo (${activeCompany.crmType})`} 
-                icon={<Icons.Transformer />} 
-                value={config.sourceJson} 
-                onChange={(val) => updateCompany(activeCompany.id, { crmConfig: { ...config, sourceJson: val } })} 
-                readOnly={isAdminMode} 
+              <CodeEditor
+                label={`Payload Exemplo (${activeCompany.crmType})`}
+                icon={<Icons.Transformer />}
+                value={config.sourceJson || "{}"}
+                onChange={(val) => updateCompany(activeCompany.id, { crmConfig: { ...config, sourceJson: val } })}
+                readOnly={isAdminMode}
               />
             </div>
             <div className="flex-1 flex flex-col space-y-6 pb-10">
               <div className={`bg-slate-900 border rounded-[2rem] p-8 transition-opacity ${isAdminMode ? 'opacity-30 pointer-events-none' : 'border-slate-800'}`}>
-                 <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Prompt de Mapeamento (IA Logic)</h3>
-                 <textarea className="w-full h-44 bg-slate-950 border border-slate-800 rounded-2xl p-6 text-sm text-slate-300 outline-none focus:ring-1 ring-blue-500/30" value={config.aiInstructions} onChange={(e) => updateCompany(activeCompany.id, { crmConfig: { ...config, aiInstructions: e.target.value } })} placeholder="Prompt para IA..." />
+                <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Prompt de Mapeamento (IA Logic)</h3>
+                <textarea className="w-full h-44 bg-slate-950 border border-slate-800 rounded-2xl p-6 text-sm text-slate-300 outline-none focus:ring-1 ring-blue-500/30" value={config.aiInstructions || ""} onChange={(e) => updateCompany(activeCompany.id, { crmConfig: { ...config, aiInstructions: e.target.value } })} placeholder="Prompt para IA..." />
               </div>
 
               <div className={`flex-1 flex flex-col border rounded-[2rem] p-8 transition-all duration-500 ${isAdminMode ? 'bg-slate-950 border-amber-500/20 ring-1 ring-amber-500/10' : 'bg-slate-900/40 border-slate-800'}`}>
-                 <div className="flex justify-between items-center mb-6">
-                   <div className="flex space-x-4">
-                      <button 
-                        onClick={() => setAdminSubTab('ingestion')}
-                        className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'ingestion' ? 'text-blue-400' : 'text-slate-600'}`}
-                      >
-                        Ingestion Protocol
-                      </button>
-                      <button 
-                        onClick={() => setAdminSubTab('output')}
-                        className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'output' ? 'text-amber-500' : 'text-slate-600'}`}
-                      >
-                        Output Blueprint
-                      </button>
-                   </div>
-                   {isAdminMode && (
-                     <button onClick={saveAdminConfigs} className="text-[11px] font-black text-emerald-500 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all">
-                       SALVAR ALTERAÇÕES
-                     </button>
-                   )}
-                 </div>
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={() => setAdminSubTab('ingestion')}
+                      className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'ingestion' ? 'text-blue-400' : 'text-slate-600'}`}
+                    >
+                      Ingestion Protocol
+                    </button>
+                    <button
+                      onClick={() => setAdminSubTab('output')}
+                      className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'output' ? 'text-amber-500' : 'text-slate-600'}`}
+                    >
+                      Output Blueprint
+                    </button>
+                  </div>
+                  {isAdminMode && (
+                    <button onClick={saveAdminConfigs} className="text-[11px] font-black text-emerald-500 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all">
+                      SALVAR ALTERAÇÕES
+                    </button>
+                  )}
+                </div>
 
-                 <div className="flex-1 bg-slate-950 rounded-2xl p-6 border border-white/5 overflow-auto shadow-inner relative">
-                   <AnimatePresence mode="wait">
+                <div className="flex-1 bg-slate-950 rounded-2xl p-6 border border-white/5 overflow-auto shadow-inner relative">
+                  <AnimatePresence mode="wait">
                     {adminSubTab === 'ingestion' ? (
                       <motion.div key="ingestion" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
                         {isAdminMode ? (
@@ -167,14 +168,14 @@ const JsonMapperView: React.FC = () => {
                         )}
                       </motion.div>
                     )}
-                   </AnimatePresence>
-                 </div>
-                 {schemaError && <p className="text-rose-500 text-[12px] mt-4 font-bold uppercase tracking-widest">{schemaError}</p>}
-                 {!isAdminMode && (
-                   <p className="mt-4 text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] text-center">
-                     Clique em configurar protocolos para editar as estruturas desta empresa.
-                   </p>
-                 )}
+                  </AnimatePresence>
+                </div>
+                {schemaError && <p className="text-rose-500 text-[12px] mt-4 font-bold uppercase tracking-widest">{schemaError}</p>}
+                {!isAdminMode && (
+                  <p className="mt-4 text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] text-center">
+                    Clique em configurar protocolos para editar as estruturas desta empresa.
+                  </p>
+                )}
               </div>
             </div>
           </>

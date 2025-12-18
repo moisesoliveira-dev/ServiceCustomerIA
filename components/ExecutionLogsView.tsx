@@ -1,10 +1,11 @@
+"use client";
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Badge } from './ui/Core';
-import { ExecutionLog, ExecutionStep } from '../types';
+import { ExecutionLog, ExecutionStep } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icons } from './Icons';
-import { MOCK_EXECUTIONS } from '../constants';
+import { MOCK_EXECUTIONS } from '@/constants';
 
 // --- SUB-COMPONENTS ---
 
@@ -88,7 +89,7 @@ const LogDetailView: React.FC<{ log: ExecutionLog | null }> = ({ log }) => (
   </div>
 );
 
-const LogsSidebar: React.FC<{ 
+const LogsSidebar: React.FC<{
   logs: ExecutionLog[];
   selectedLogId: string | null;
   onSelectLog: (log: ExecutionLog) => void;
@@ -147,9 +148,9 @@ const ExecutionLogsView: React.FC = () => {
       return matchesStatus && matchesSearch;
     });
   }, [searchTerm, statusFilter]);
-  
+
   const [selectedLog, setSelectedLog] = useState<ExecutionLog | null>(filteredLogs[0] || null);
-  
+
   useEffect(() => {
     if (!selectedLog || !filteredLogs.some(log => log.id === selectedLog.id)) {
       setSelectedLog(filteredLogs[0] || null);
@@ -158,7 +159,7 @@ const ExecutionLogsView: React.FC = () => {
 
   return (
     <div className="flex-1 flex overflow-hidden bg-[#02040a]">
-      <LogsSidebar 
+      <LogsSidebar
         logs={filteredLogs}
         selectedLogId={selectedLog?.id || null}
         onSelectLog={setSelectedLog}
