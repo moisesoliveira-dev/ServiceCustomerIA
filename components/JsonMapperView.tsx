@@ -14,13 +14,13 @@ const MapperHeader: React.FC<{ company: any; isAdmin: boolean; toggleAdmin: () =
         <h2 className="text-xl font-black text-white tracking-tight">{company.name}</h2>
         <Badge color="blue">CRM: {company.crmType}</Badge>
       </div>
-      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em]">Transformer Inteligente & Protocol Management</p>
+      <p className="text-[12px] text-slate-500 font-bold uppercase tracking-[0.2em]">Transformer Inteligente & Protocol Management</p>
     </div>
     <div className="flex items-center space-x-4">
-      <button onClick={toggleAdmin} className={`px-5 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all border ${isAdmin ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.1)]' : 'bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300'}`}>
+      <button onClick={toggleAdmin} className={`px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border ${isAdmin ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.1)]' : 'bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300'}`}>
         {isAdmin ? '🔐 SAIR MODO ADMIN' : '🔓 CONFIGURAR PROTOCOLOS (ADMIN)'}
       </button>
-      <button onClick={runTest} disabled={loading || isAdmin} className={`px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-600/20 ${(loading || isAdmin) ? 'opacity-50 grayscale' : ''}`}>
+      <button onClick={runTest} disabled={loading || isAdmin} className={`px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-[12px] font-black uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-600/20 ${(loading || isAdmin) ? 'opacity-50 grayscale' : ''}`}>
         {loading ? 'Interpretando...' : 'Testar Transformação'}
       </button>
     </div>
@@ -30,7 +30,7 @@ const MapperHeader: React.FC<{ company: any; isAdmin: boolean; toggleAdmin: () =
 const MapperTabs: React.FC<{ active: string; onSelect: (id: 'config' | 'preview') => void }> = ({ active, onSelect }) => (
   <div className="px-10 flex space-x-10 border-b border-white/5 bg-slate-900/10 shrink-0">
     {['config', 'preview'].map(tab => (
-      <button key={tab} onClick={() => onSelect(tab as any)} className={`py-4 text-[10px] font-black uppercase tracking-widest transition-all relative ${active === tab ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>
+      <button key={tab} onClick={() => onSelect(tab as any)} className={`py-4 text-[12px] font-black uppercase tracking-widest transition-all relative ${active === tab ? 'text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}>
         {tab === 'config' ? 'Lógica do Pipeline' : 'Preview da IA'}
         {active === tab && <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-1 bg-blue-500 rounded-t-full" />}
       </button>
@@ -120,7 +120,7 @@ const JsonMapperView: React.FC = () => {
             </div>
             <div className="flex-1 flex flex-col space-y-6">
               <div className={`bg-slate-900 border rounded-[2rem] p-8 transition-opacity ${isAdminMode ? 'opacity-30 pointer-events-none' : 'border-slate-800'}`}>
-                 <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Prompt de Mapeamento (IA Logic)</h3>
+                 <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Prompt de Mapeamento (IA Logic)</h3>
                  <textarea className="w-full h-44 bg-slate-950 border border-slate-800 rounded-2xl p-6 text-sm text-slate-300 outline-none focus:ring-1 ring-blue-500/30" value={config.aiInstructions} onChange={(e) => updateCompany(activeCompany.id, { crmConfig: { ...config, aiInstructions: e.target.value } })} placeholder="Prompt para IA..." />
               </div>
 
@@ -129,19 +129,19 @@ const JsonMapperView: React.FC = () => {
                    <div className="flex space-x-4">
                       <button 
                         onClick={() => setAdminSubTab('ingestion')}
-                        className={`text-[10px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'ingestion' ? 'text-blue-400' : 'text-slate-600'}`}
+                        className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'ingestion' ? 'text-blue-400' : 'text-slate-600'}`}
                       >
                         Ingestion Protocol
                       </button>
                       <button 
                         onClick={() => setAdminSubTab('output')}
-                        className={`text-[10px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'output' ? 'text-amber-500' : 'text-slate-600'}`}
+                        className={`text-[12px] font-black uppercase tracking-widest transition-colors ${adminSubTab === 'output' ? 'text-amber-500' : 'text-slate-600'}`}
                       >
                         Output Blueprint
                       </button>
                    </div>
                    {isAdminMode && (
-                     <button onClick={saveAdminConfigs} className="text-[9px] font-black text-emerald-500 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all">
+                     <button onClick={saveAdminConfigs} className="text-[11px] font-black text-emerald-500 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all">
                        SALVAR ALTERAÇÕES
                      </button>
                    )}
@@ -152,25 +152,25 @@ const JsonMapperView: React.FC = () => {
                     {adminSubTab === 'ingestion' ? (
                       <motion.div key="ingestion" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
                         {isAdminMode ? (
-                          <textarea className="w-full h-full bg-transparent font-mono text-[11px] text-blue-300 outline-none resize-none" value={tempIngestion} onChange={e => setTempIngestion(e.target.value)} spellCheck={false} />
+                          <textarea className="w-full h-full bg-transparent font-mono text-[12px] text-blue-300 outline-none resize-none" value={tempIngestion} onChange={e => setTempIngestion(e.target.value)} spellCheck={false} />
                         ) : (
-                          <pre className="text-[10px] text-blue-500/80 font-mono leading-relaxed">{JSON.stringify(currentIngestion, null, 2)}</pre>
+                          <pre className="text-[12px] text-blue-500/80 font-mono leading-relaxed">{JSON.stringify(currentIngestion, null, 2)}</pre>
                         )}
                       </motion.div>
                     ) : (
                       <motion.div key="output" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
                         {isAdminMode ? (
-                          <textarea className="w-full h-full bg-transparent font-mono text-[11px] text-amber-500 outline-none resize-none" value={tempOutput} onChange={e => setTempOutput(e.target.value)} spellCheck={false} />
+                          <textarea className="w-full h-full bg-transparent font-mono text-[12px] text-amber-500 outline-none resize-none" value={tempOutput} onChange={e => setTempOutput(e.target.value)} spellCheck={false} />
                         ) : (
-                          <pre className="text-[10px] text-amber-500/80 font-mono leading-relaxed">{JSON.stringify(currentOutput, null, 2)}</pre>
+                          <pre className="text-[12px] text-amber-500/80 font-mono leading-relaxed">{JSON.stringify(currentOutput, null, 2)}</pre>
                         )}
                       </motion.div>
                     )}
                    </AnimatePresence>
                  </div>
-                 {schemaError && <p className="text-rose-500 text-[10px] mt-4 font-bold uppercase tracking-widest">{schemaError}</p>}
+                 {schemaError && <p className="text-rose-500 text-[12px] mt-4 font-bold uppercase tracking-widest">{schemaError}</p>}
                  {!isAdminMode && (
-                   <p className="mt-4 text-[8px] text-slate-600 font-black uppercase tracking-[0.2em] text-center">
+                   <p className="mt-4 text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] text-center">
                      Clique em configurar protocolos para editar as estruturas desta empresa.
                    </p>
                  )}
@@ -180,7 +180,7 @@ const JsonMapperView: React.FC = () => {
         ) : (
           <div className="flex-1 bg-slate-950 border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl">
             <div className="p-6 bg-blue-600/5 border-b border-white/5 flex justify-between shrink-0">
-              <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Simulação de Pipeline Completo</span>
+              <span className="text-[12px] font-black text-blue-400 uppercase tracking-widest">Simulação de Pipeline Completo</span>
               <Badge color="blue" pulse>Live Gemini Intelligence</Badge>
             </div>
             <div className="flex-1 p-10 overflow-auto font-mono text-xs text-slate-300 custom-scrollbar leading-relaxed">
@@ -189,7 +189,7 @@ const JsonMapperView: React.FC = () => {
               ) : (
                 <div className="h-full flex flex-col items-center justify-center opacity-30">
                   <Icons.Transformer />
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] mt-4 text-slate-500">Aguardando execução do teste de estresse...</p>
+                  <p className="text-[12px] font-black uppercase tracking-[0.2em] mt-4 text-slate-500">Aguardando execução do teste de estresse...</p>
                 </div>
               )}
             </div>

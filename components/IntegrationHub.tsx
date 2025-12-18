@@ -75,7 +75,7 @@ const IntegrationHub: React.FC = () => {
         title="Credential Manager" 
         subtitle="Nexus Vault: Gestão de segredos e conectividade de agentes workforce"
         action={
-          <div className="flex items-center space-x-2 text-[10px] font-black text-slate-600 uppercase tracking-widest bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5">
+          <div className="flex items-center space-x-2 text-[12px] font-black text-slate-600 uppercase tracking-widest bg-slate-900/50 px-4 py-2 rounded-xl border border-white/5">
              <Icons.Transformer />
              <span>AES-256 Active</span>
           </div>
@@ -86,7 +86,7 @@ const IntegrationHub: React.FC = () => {
         {/* Lado Esquerdo: Biblioteca de Agentes */}
         <div className="lg:col-span-4 space-y-6">
           <div className="px-2">
-            <h3 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Catalog de Provedores</h3>
+            <h3 className="text-[12px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Catalog de Provedores</h3>
           </div>
           <div className="grid grid-cols-1 gap-3">
             {INTEGRATIONS_LIST.map((agent) => (
@@ -104,7 +104,7 @@ const IntegrationHub: React.FC = () => {
                   <span className="text-2xl group-hover:scale-110 transition-transform">{agent.icon}</span>
                   <div>
                     <p className={`text-xs font-bold ${selectedAgent?.id === agent.id ? 'text-blue-400' : 'text-slate-200'}`}>{agent.name}</p>
-                    <p className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{agent.type}</p>
+                    <p className="text-[11px] text-slate-600 font-black uppercase tracking-widest">{agent.type}</p>
                   </div>
                 </div>
                 <div className="text-slate-700 group-hover:text-blue-500 transition-colors">
@@ -143,7 +143,7 @@ const IntegrationHub: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Apelido da Credencial</label>
+                        <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest">Apelido da Credencial</label>
                         <input 
                           type="text" 
                           placeholder="Ex: Produção Cluster-A"
@@ -154,7 +154,7 @@ const IntegrationHub: React.FC = () => {
                       </div>
                       {selectedAgent.configFields.map(field => (
                         <div key={field.key} className="space-y-2">
-                          <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{field.label}</label>
+                          <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest">{field.label}</label>
                           <input 
                             type={field.type === 'password' || field.type === 'secret' ? 'password' : 'text'}
                             placeholder={field.placeholder}
@@ -165,8 +165,8 @@ const IntegrationHub: React.FC = () => {
                     </div>
 
                     <div className="flex justify-end space-x-4">
-                       <button onClick={() => setSelectedAgent(null)} className="px-6 py-2.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Descartar</button>
-                       <button onClick={handleCreateCredential} className="px-8 py-2.5 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-500 shadow-xl shadow-blue-600/20">
+                       <button onClick={() => setSelectedAgent(null)} className="px-6 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-widest">Descartar</button>
+                       <button onClick={handleCreateCredential} className="px-8 py-2.5 bg-blue-600 text-white text-[12px] font-black uppercase tracking-widest rounded-xl hover:bg-blue-500 shadow-xl shadow-blue-600/20">
                          Autorizar & Salvar no Cofre
                        </button>
                     </div>
@@ -181,7 +181,7 @@ const IntegrationHub: React.FC = () => {
                 className="space-y-4"
               >
                 <div className="flex justify-between items-center px-2">
-                  <h3 className="text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Cofre de Credenciais Ativas</h3>
+                  <h3 className="text-[12px] font-black text-slate-600 uppercase tracking-[0.2em]">Cofre de Credenciais Ativas</h3>
                   <Badge color="slate">{credentials.length} Segredos Armazenados</Badge>
                 </div>
 
@@ -199,7 +199,7 @@ const IntegrationHub: React.FC = () => {
                                 <h4 className="text-sm font-bold text-white">{cred.alias}</h4>
                                 <StatusIndicator status={cred.status} />
                               </div>
-                              <div className="flex items-center mt-1 space-x-4 text-[9px] font-black text-slate-600 uppercase tracking-widest">
+                              <div className="flex items-center mt-1 space-x-4 text-[11px] font-black text-slate-600 uppercase tracking-widest">
                                 <span>ID: {cred.credentialId}</span>
                                 <span className="w-1 h-1 bg-slate-800 rounded-full"></span>
                                 <span>Último Teste: {cred.lastTested}</span>
@@ -211,7 +211,7 @@ const IntegrationHub: React.FC = () => {
                            <button 
                              onClick={() => handleTestConnection(cred.id)}
                              disabled={isTesting === cred.id}
-                             className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-800 transition-all ${isTesting === cred.id ? 'bg-blue-500/10 text-blue-400' : 'hover:bg-slate-800 text-slate-400'}`}
+                             className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border border-slate-800 transition-all ${isTesting === cred.id ? 'bg-blue-500/10 text-blue-400' : 'hover:bg-slate-800 text-slate-400'}`}
                            >
                              {isTesting === cred.id ? 'Handshake...' : 'Test Link'}
                            </button>
@@ -229,8 +229,8 @@ const IntegrationHub: React.FC = () => {
                     <div className="w-16 h-16 bg-slate-950 rounded-3xl flex items-center justify-center text-slate-700 mb-6 border border-white/5">
                       <Icons.Integrations />
                     </div>
-                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">Nenhuma credencial ativa neste tenant</p>
-                    <p className="text-[9px] text-slate-700 font-bold uppercase mt-2">Selecione um provedor à esquerda para começar</p>
+                    <p className="text-[12px] font-black text-slate-600 uppercase tracking-[0.3em]">Nenhuma credencial ativa neste tenant</p>
+                    <p className="text-[11px] text-slate-700 font-bold uppercase mt-2">Selecione um provedor à esquerda para começar</p>
                   </div>
                 )}
               </motion.div>
@@ -243,8 +243,8 @@ const IntegrationHub: React.FC = () => {
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
              </div>
              <div>
-               <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Protocol Alpha-9</h5>
-               <p className="text-[10px] text-slate-600 mt-1 leading-relaxed">
+               <h5 className="text-[12px] font-black text-slate-400 uppercase tracking-widest">Security Protocol Alpha-9</h5>
+               <p className="text-[12px] text-slate-600 mt-1 leading-relaxed">
                  O NexusAI utiliza encriptação ponta-a-ponta. Suas chaves de API nunca são armazenadas em texto puro e são acessadas apenas via tokens efêmeros durante a execução do pipeline.
                </p>
              </div>

@@ -12,7 +12,7 @@ export const Badge: React.FC<{ children: React.ReactNode; color?: string; pulse?
   };
 
   return (
-    <div className={`px-2.5 py-1 border rounded-full text-[9px] font-black uppercase tracking-widest flex items-center space-x-2 ${colors[color]}`}>
+    <div className={`px-2.5 py-1 border rounded-full text-[11px] font-black uppercase tracking-widest flex items-center space-x-2 ${colors[color]}`}>
       {pulse && <span className={`w-1.5 h-1.5 rounded-full animate-pulse bg-current`} />}
       <span>{children}</span>
     </div>
@@ -29,7 +29,7 @@ export const SectionHeader: React.FC<{ title: string; subtitle?: string; action?
   <header className="flex justify-between items-center mb-8">
     <div>
       <h2 className="text-2xl font-black text-white tracking-tight">{title}</h2>
-      {subtitle && <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-[12px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-1">{subtitle}</p>}
     </div>
     {action && <div>{action}</div>}
   </header>
@@ -40,9 +40,9 @@ export const CodeEditor: React.FC<{ value: string; onChange?: (val: string) => v
     <div className="px-5 py-3 bg-slate-900/50 border-b border-slate-800 flex justify-between items-center">
       <div className="flex items-center space-x-3">
         {icon}
-        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{label}</span>
+        <span className="text-[12px] font-black text-slate-500 uppercase tracking-widest">{label}</span>
       </div>
-      {readOnly && <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">Read Only</span>}
+      {readOnly && <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Read Only</span>}
     </div>
     <textarea
       className="flex-1 bg-transparent p-6 font-mono text-xs text-blue-300 outline-none resize-none custom-scrollbar selection:bg-blue-500/20"

@@ -17,7 +17,7 @@ const SidebarItem: React.FC<{ to: string; icon: React.ReactNode; label: string; 
     >
       {active && <motion.div layoutId="sidebar-active" className="absolute left-0 w-1 h-6 bg-blue-500 rounded-r-full" />}
       <span className={`transition-all duration-300 ${active ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>{icon}</span>
-      <span className={`font-bold text-[12px] tracking-tight ${active ? 'text-blue-50' : ''}`}>{label}</span>
+      <span className={`font-bold text-[13px] tracking-tight ${active ? 'text-blue-50' : ''}`}>{label}</span>
     </Link>
   </motion.div>
 );
@@ -38,14 +38,14 @@ export const Sidebar: React.FC = () => {
       </div>
       
       <div className="flex-1 px-4 overflow-y-auto pb-8 custom-scrollbar">
-        <div className="mt-8 mb-3 px-4 text-[9px] font-black text-slate-600 uppercase tracking-widest">Plataforma (ADM)</div>
+        <div className="mt-8 mb-3 px-4 text-[11px] font-black text-slate-600 uppercase tracking-widest">Plataforma (ADM)</div>
         <SidebarItem to="/" icon={<Icons.Dashboard />} label="Dashboard" active={location.pathname === '/'} />
         <SidebarItem to="/companies" icon={<Icons.Integrations />} label="Tenants" active={location.pathname === '/companies'} />
         <SidebarItem to="/settings" icon={<Icons.Monitor />} label="Global Config" active={location.pathname === '/settings'} />
         
         {activeCompany && (
           <>
-            <div className="mt-8 mb-3 px-4 text-[9px] font-black text-slate-600 uppercase tracking-widest">Operação: {activeCompany.name}</div>
+            <div className="mt-8 mb-3 px-4 text-[11px] font-black text-slate-600 uppercase tracking-widest">Operação: {activeCompany.name}</div>
             <SidebarItem to="/flow" icon={<Icons.Workflow />} label="Design Flow" active={location.pathname === '/flow'} />
             <SidebarItem to="/logs" icon={<Icons.Monitor />} label="Execuções & Logs" active={location.pathname === '/logs'} />
             <SidebarItem to="/mapping" icon={<Icons.Transformer />} label="Transformer AI" active={location.pathname === '/mapping'} />
@@ -56,10 +56,10 @@ export const Sidebar: React.FC = () => {
 
       <div className="p-4 border-t border-white/5">
         <div className="flex items-center space-x-3 p-2 rounded-xl bg-white/[0.02]">
-          <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[10px] font-black">AD</div>
+          <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-[12px] font-black">AD</div>
           <div>
-            <p className="text-[11px] font-bold text-white">Root Admin</p>
-            <p className="text-[9px] text-slate-600 uppercase font-black">Cluster-Alpha</p>
+            <p className="text-[12px] font-bold text-white">Root Admin</p>
+            <p className="text-[11px] text-slate-600 uppercase font-black">Cluster-Alpha</p>
           </div>
         </div>
       </div>

@@ -52,19 +52,19 @@ const GlobalSchemaEditor: React.FC = () => {
       <header className="p-10 border-b border-white/5 flex justify-between items-end bg-slate-950/20 shrink-0">
         <div>
           <div className="flex items-center space-x-3 mb-1">
-            <div className={`w-8 h-8 rounded-lg ${activeCompany.color} flex items-center justify-center text-[10px] font-black text-white`}>
+            <div className={`w-8 h-8 rounded-lg ${activeCompany.color} flex items-center justify-center text-[12px] font-black text-white`}>
               {activeCompany.name[0]}
             </div>
             <h1 className="text-2xl font-black text-white tracking-tighter">{activeCompany.name}</h1>
           </div>
-          <p className="text-slate-500 mt-1 uppercase tracking-[0.25em] text-[10px] font-black">Admin: Protocolo de Dados Exclusivo</p>
+          <p className="text-slate-500 mt-1 uppercase tracking-[0.25em] text-[12px] font-black">Admin: Protocolo de Dados Exclusivo</p>
         </div>
         <div className="flex space-x-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setTempSchema(JSON.stringify(currentSchema, null, 2))}
-            className="px-6 py-2.5 text-[10px] font-black text-slate-400 uppercase tracking-widest border border-slate-800 rounded-xl hover:bg-slate-900 transition-all"
+            className="px-6 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-widest border border-slate-800 rounded-xl hover:bg-slate-900 transition-all"
           >
             Resetar Alterações
           </motion.button>
@@ -73,7 +73,7 @@ const GlobalSchemaEditor: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             onClick={handleSave}
             disabled={isSaving}
-            className={`px-8 py-2.5 text-[10px] font-black text-white uppercase tracking-widest bg-blue-600 rounded-xl shadow-xl shadow-blue-600/20 transition-all ${isSaving ? 'opacity-50' : ''}`}
+            className={`px-8 py-2.5 text-[12px] font-black text-white uppercase tracking-widest bg-blue-600 rounded-xl shadow-xl shadow-blue-600/20 transition-all ${isSaving ? 'opacity-50' : ''}`}
           >
             {isSaving ? 'Salvando...' : 'Aplicar nesta Empresa'}
           </motion.button>
@@ -89,14 +89,14 @@ const GlobalSchemaEditor: React.FC = () => {
                </div>
                <div>
                   <h2 className="text-xs font-black text-slate-100 uppercase tracking-widest">Protocol Definition (JSON)</h2>
-                  <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">Define a estrutura interna ALVO para esta empresa específica</p>
+                  <p className="text-[11px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">Define a estrutura interna ALVO para esta empresa específica</p>
                </div>
             </div>
             {error && (
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-500 text-[10px] font-black"
+                className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-500 text-[12px] font-black"
               >
                 {error}
               </motion.div>
@@ -112,18 +112,18 @@ const GlobalSchemaEditor: React.FC = () => {
               placeholder='{ "key": "value" }'
             />
             <div className="absolute top-10 right-10 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
-               <div className="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-[9px] font-black text-slate-600 uppercase tracking-widest">TENANT SCOPE</div>
-               <div className="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-[9px] font-black text-slate-600 uppercase tracking-widest">ENV: Production</div>
+               <div className="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-[11px] font-black text-slate-600 uppercase tracking-widest">TENANT SCOPE</div>
+               <div className="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-[11px] font-black text-slate-600 uppercase tracking-widest">ENV: Production</div>
             </div>
           </div>
         </div>
 
         <div className="mt-8 flex items-center space-x-6 px-4">
            <div className="flex -space-x-2">
-              <div className="w-8 h-8 rounded-full border-2 border-[#02040a] bg-blue-600 flex items-center justify-center text-[10px] font-black text-white">IA</div>
-              <div className="w-8 h-8 rounded-full border-2 border-[#02040a] bg-indigo-600 flex items-center justify-center text-[10px] font-black text-white">CF</div>
+              <div className="w-8 h-8 rounded-full border-2 border-[#02040a] bg-blue-600 flex items-center justify-center text-[12px] font-black text-white">IA</div>
+              <div className="w-8 h-8 rounded-full border-2 border-[#02040a] bg-indigo-600 flex items-center justify-center text-[12px] font-black text-white">CF</div>
            </div>
-           <p className="text-[10px] text-slate-600 font-black uppercase tracking-widest">
+           <p className="text-[12px] text-slate-600 font-black uppercase tracking-widest">
              Alterações neste schema são <span className="text-blue-500">isoladas</span> para {activeCompany.name}. O Transformer AI da empresa usará esta estrutura imediatamente.
            </p>
         </div>

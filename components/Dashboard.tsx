@@ -21,12 +21,12 @@ const LogItem: React.FC<{ log: any }> = ({ log }) => (
       <div className={`w-2 h-2 rounded-full ${log.status === 'SUCCESS' ? 'bg-green-500' : log.status === 'FAILURE' ? 'bg-rose-500' : 'bg-amber-500'}`}></div>
       <div>
         <p className="text-sm font-medium text-slate-200">{log.event}</p>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest">{log.id} • Nexus Core Cluster-A</p>
+        <p className="text-[12px] text-slate-500 uppercase tracking-widest">{log.id} • Nexus Core Cluster-A</p>
       </div>
     </div>
     <div className="text-right">
       <p className={`text-xs font-bold ${log.status === 'SUCCESS' ? 'text-green-500' : log.status === 'FAILURE' ? 'text-rose-500' : 'text-amber-500'}`}>{log.status}</p>
-      <p className="text-[10px] text-slate-500">{log.time}</p>
+      <p className="text-[12px] text-slate-500">{log.time}</p>
     </div>
   </div>
 );

@@ -1,4 +1,3 @@
-
 import React, { useState, createContext, useContext } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -33,9 +32,10 @@ interface AppContextType {
   companies: Company[];
   activeCompany: Company | null;
   globalVars: EnvVar[];
-  setActiveCompanyById: (id: string) => void;
+  setActiveCompanyById: (id: string | null) => void;
   updateCompany: (id: string, updates: Partial<Company>) => void;
   addCompany: (company: Company) => void;
+  deleteCompany: (id: string) => void;
   setGlobalVars: (vars: EnvVar[]) => void;
   // Added missing members to AppContextType
   globalSchema: any;
@@ -66,7 +66,7 @@ const INITIAL_VARS: EnvVar[] = [
 
 export default function App() {
   const [companies, setCompanies] = useState<Company[]>(INITIAL_COMPANIES);
-  const [activeCompanyId, setActiveCompanyId] = useState<string>(INITIAL_COMPANIES[0].id);
+  const [activeCompanyId, setActiveCompanyId] = useState<string | null>(INITIAL_COMPANIES.length > 0 ? INITIAL_COMPANIES[0].id : null);
   const [globalVars, setGlobalVars] = useState<EnvVar[]>(INITIAL_VARS);
 
   const activeCompany = companies.find(c => c.id === activeCompanyId) || null;
@@ -80,14 +80,26 @@ export default function App() {
     setActiveCompanyId(company.id);
   };
 
+  const deleteCompany = (id: string) => {
+    setCompanies(prev => {
+      const remainingCompanies = prev.filter(c => c.id !== id);
+      if (activeCompanyId === id) {
+        setActiveCompanyId(remainingCompanies.length > 0 ? remainingCompanies[0].id : null);
+      }
+      return remainingCompanies;
+    });
+  };
+
   return (
     <AppContext.Provider value={{ 
       companies, 
       activeCompany, 
       globalVars, 
+      // FIX: The context provider was missing the implementation for setActiveCompanyById. This assigns the state setter function to the context value.
       setActiveCompanyById: setActiveCompanyId, 
       updateCompany, 
       addCompany, 
+      deleteCompany,
       setGlobalVars,
       // Added missing context values
       globalSchema: DEFAULT_GLOBAL_SCHEMA,

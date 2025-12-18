@@ -66,7 +66,7 @@ const StageIndicator: React.FC<{ current: string; stage: string; label: string; 
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
         ) : stageIndex + 1}
       </div>
-      <span className={`text-[10px] mt-3 font-black uppercase tracking-widest text-center h-8 flex items-center ${isCurrent ? 'text-blue-400' : 'text-slate-500'}`}>
+      <span className={`text-[12px] mt-3 font-black uppercase tracking-widest text-center h-8 flex items-center ${isCurrent ? 'text-blue-400' : 'text-slate-500'}`}>
         {label}
       </span>
       {stage !== 'COMPLETE' && (
@@ -109,16 +109,16 @@ const StateMonitor: React.FC = () => {
                 className={`w-full p-5 text-left transition-all hover:bg-slate-800/40 border-l-4 ${selectedSession?.id === session.id ? 'bg-blue-600/10 border-blue-500' : 'border-transparent'}`}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded">{session.id}</span>
-                  <span className="text-[10px] text-slate-600 font-bold">{session.timestamp}</span>
+                  <span className="text-[12px] font-mono font-bold text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded">{session.id}</span>
+                  <span className="text-[12px] text-slate-600 font-bold">{session.timestamp}</span>
                 </div>
                 <p className="text-sm font-bold text-slate-200 mb-2">{session.customer}</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <div className={`w-1.5 h-1.5 rounded-full ${session.status === 'processing' ? 'bg-blue-500 animate-pulse' : 'bg-green-500'}`}></div>
-                    <span className="text-[10px] font-black uppercase text-slate-400">{session.currentStage}</span>
+                    <span className="text-[12px] font-black uppercase text-slate-400">{session.currentStage}</span>
                   </div>
-                  <span className="text-[10px] text-slate-600 font-bold italic truncate max-w-[120px]">
+                  <span className="text-[12px] text-slate-600 font-bold italic truncate max-w-[120px]">
                     {session.lastStateLabel}
                   </span>
                 </div>
@@ -135,7 +135,7 @@ const StateMonitor: React.FC = () => {
               <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-10 shadow-2xl backdrop-blur-md">
                 <div className="flex justify-between items-center mb-12">
                   <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">Core Execution Path</h3>
-                  <div className="flex items-center space-x-2 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full">
+                  <div className="flex items-center space-x-2 text-[12px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full">
                     <span>ACTIVE AGENT:</span>
                     <span className="text-white">{selectedSession.agentUsed || 'SYSTEM_ONLY'}</span>
                   </div>
@@ -154,8 +154,8 @@ const StateMonitor: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden flex flex-col h-[400px]">
                   <div className="p-4 bg-slate-800/40 border-b border-slate-800 flex justify-between items-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">State Data Context</span>
-                    <button className="text-[10px] text-blue-400 font-bold hover:underline">Copy JSON</button>
+                    <span className="text-[12px] font-black text-slate-400 uppercase tracking-widest">State Data Context</span>
+                    <button className="text-[12px] text-blue-400 font-bold hover:underline">Copy JSON</button>
                   </div>
                   <div className="flex-1 p-6 font-mono text-xs text-emerald-400 overflow-auto bg-slate-950/50">
                     <pre>{JSON.stringify(selectedSession.payload, null, 2)}</pre>
@@ -164,27 +164,27 @@ const StateMonitor: React.FC = () => {
 
                 <div className="space-y-6">
                   <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
-                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">AI Reasoning Trace</h4>
+                    <h4 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-4">AI Reasoning Trace</h4>
                     <div className="p-4 bg-blue-500/5 border border-blue-500/10 rounded-xl space-y-3">
                       <p className="text-xs text-blue-200 italic leading-relaxed">
                         "O State Manager detectou uma intenção de 'Suporte Técnico' com alta prioridade. O Router desviou o fluxo para o Agente especializado em File System para verificação automática de permissões."
                       </p>
                       <div className="flex items-center space-x-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                        <span className="text-[10px] font-bold text-slate-500 italic">Confidence: 0.982</span>
+                        <span className="text-[12px] font-bold text-slate-500 italic">Confidence: 0.982</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6">
-                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Event Timeline</h4>
+                    <h4 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-4">Event Timeline</h4>
                     <div className="space-y-4">
                       {[
                         { t: "10:45:22", e: "Worker: Started G-Drive verify" },
                         { t: "10:45:19", e: "Router: Path branched to Agent" },
                         { t: "10:45:15", e: "Manager: Logic gate applied" }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between text-[11px] border-b border-slate-800/50 pb-2 last:border-0">
+                        <div key={idx} className="flex items-center justify-between text-[12px] border-b border-slate-800/50 pb-2 last:border-0">
                           <span className="text-slate-500 font-mono">{item.t}</span>
                           <span className="text-slate-300 font-medium">{item.e}</span>
                         </div>

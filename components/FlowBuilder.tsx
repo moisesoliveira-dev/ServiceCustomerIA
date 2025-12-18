@@ -74,7 +74,7 @@ const NexusNode: React.FC<NodeProps> = ({ id, data, isConnectable }) => {
             transition={{ repeat: Infinity, duration: 2 }}
             className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 shadow-[0_0_12px_#22c55e]' : 'bg-slate-700'}`} 
           />
-          <span className={`text-[9px] font-black mt-1.5 uppercase tracking-tighter ${isConnected ? 'text-green-500' : 'text-slate-600'}`}>
+          <span className={`text-[11px] font-black mt-1.5 uppercase tracking-tighter ${isConnected ? 'text-green-500' : 'text-slate-600'}`}>
             {isConnected ? 'LIVE' : 'IDLE'}
           </span>
         </div>
@@ -84,7 +84,7 @@ const NexusNode: React.FC<NodeProps> = ({ id, data, isConnectable }) => {
         <h4 className={`text-sm font-bold truncate tracking-tight ${isConnected ? 'text-slate-100' : 'text-slate-500'}`}>
           {data.label}
         </h4>
-        <p className={`text-[10px] uppercase tracking-[0.1em] font-black ${isConnected ? 'text-slate-600' : 'text-slate-800'}`}>
+        <p className={`text-[12px] uppercase tracking-[0.1em] font-black ${isConnected ? 'text-slate-600' : 'text-slate-800'}`}>
           {nodeType?.replace('_', ' ')}
         </p>
       </div>
@@ -211,14 +211,14 @@ const FlowBuilder: React.FC = () => {
             <h2 className="text-lg font-bold text-white tracking-tight leading-none">Flow Orchestrator</h2>
             <div className="flex items-center mt-1.5 space-x-2">
                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]"></span>
-               <span className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Pipeline Active</span>
+               <span className="text-[12px] text-slate-600 font-black uppercase tracking-widest">Pipeline Active</span>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex bg-slate-900/50 border border-slate-800/60 rounded-2xl p-1.5">
-             <button className="px-5 py-2 text-[11px] font-black bg-slate-800 text-blue-400 rounded-xl shadow-lg uppercase tracking-wider">Designer</button>
-             <button onClick={() => navigate('/monitor')} className="px-5 py-2 text-[11px] font-black text-slate-600 hover:text-white transition-all uppercase tracking-wider">Monitor</button>
+             <button className="px-5 py-2 text-[12px] font-black bg-slate-800 text-blue-400 rounded-xl shadow-lg uppercase tracking-wider">Designer</button>
+             <button onClick={() => navigate('/monitor')} className="px-5 py-2 text-[12px] font-black text-slate-600 hover:text-white transition-all uppercase tracking-wider">Monitor</button>
           </div>
           <motion.button 
             whileHover={{ scale: 1.05 }}
@@ -269,7 +269,7 @@ const FlowBuilder: React.FC = () => {
                exit={{ opacity: 0, x: 50, scale: 0.9 }}
                className="bg-slate-950/95 border border-slate-800/60 rounded-[2rem] p-8 shadow-[0_30px_60px_rgba(0,0,0,0.5)] w-80 backdrop-blur-3xl ring-1 ring-white/5"
              >
-               <h4 className="text-[11px] font-black text-slate-600 uppercase tracking-[0.3em] mb-8">Agent Library</h4>
+               <h4 className="text-[12px] font-black text-slate-600 uppercase tracking-[0.3em] mb-8">Agent Library</h4>
                <div className="space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
                  {INTEGRATIONS_LIST.map(item => (
                    <motion.button 
@@ -281,7 +281,7 @@ const FlowBuilder: React.FC = () => {
                      <div className="w-10 h-10 flex items-center justify-center bg-slate-900 rounded-xl text-xl mr-4 border border-slate-800">{item.icon}</div>
                      <div className="flex-1">
                        <p className="text-xs font-bold text-slate-100">{item.name}</p>
-                       <p className="text-[9px] text-slate-600 font-black uppercase tracking-widest">{item.type.split('_')[0]}</p>
+                       <p className="text-[11px] text-slate-600 font-black uppercase tracking-widest">{item.type.split('_')[0]}</p>
                      </div>
                    </motion.button>
                  ))}
@@ -293,8 +293,8 @@ const FlowBuilder: React.FC = () => {
 
       <div className="absolute bottom-8 left-8 z-10">
          <div className="bg-slate-900/80 border border-white/5 rounded-2xl p-4 backdrop-blur-xl max-w-xs shadow-2xl">
-            <h5 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">Regras de Protocolo</h5>
-            <ul className="text-[10px] text-slate-400 space-y-1.5 font-medium">
+            <h5 className="text-[12px] font-black text-blue-400 uppercase tracking-widest mb-2">Regras de Protocolo</h5>
+            <ul className="text-[12px] text-slate-400 space-y-1.5 font-medium">
                <li className="flex items-center"><span className="w-1 h-1 bg-blue-500 rounded-full mr-2"></span>Cadeia Core é auto-gerenciada.</li>
                <li className="flex items-center"><span className="w-1 h-1 bg-purple-500 rounded-full mr-2"></span>Workers ligam-se apenas ao Router.</li>
                <li className="flex items-center"><span className="w-1 h-1 bg-emerald-500 rounded-full mr-2"></span>Fluxo bidirecional permitido no Router.</li>
