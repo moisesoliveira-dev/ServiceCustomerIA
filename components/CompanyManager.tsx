@@ -12,60 +12,83 @@ const CRM_TEMPLATES = [
 
 const ITEMS_PER_PAGE = 5;
 
-const EditForm: React.FC<{
-  onSave: () => void;
-  onCancel: () => void;
-  newName: string;
-  setNewName: (name: string) => void;
-  selectedCRM: CRMType;
-  setSelectedCRM: (crm: CRMType) => void;
-}> = ({ onSave, onCancel, newName, setNewName, selectedCRM, setSelectedCRM }) => (
-  <div className="bg-slate-900/60 border border-blue-500/20 rounded-[2rem] p-8 mt-[-1rem] mb-6 backdrop-blur-xl shadow-2xl ring-1 ring-white/5">
-    <h2 className="text-lg font-bold text-white mb-6">Editar Ambiente</h2>
-    <div className="space-y-6">
-      <div>
-        <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-2">Nome da Organização</label>
-        <input 
-          type="text" 
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          placeholder="Ex: Global Logistics Inc."
-          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all"
-        />
-      </div>
-      <div>
-        <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-4">Pipeline de Entrada (CRM)</label>
-        <div className="grid grid-cols-3 gap-4">
-          {CRM_TEMPLATES.map(crm => (
+const CompanyFormModal: React.FC<{
+  mode: 'new' | 'edit';
+  companyToEdit?: Company;
+  onSave: (data: { name: string; crmType: CRMType }) => void;
+  onClose: () => void;
+}> = ({ mode, companyToEdit, onSave, onClose }) => {
+  const [newName, setNewName] = useState('');
+  const [selectedCRM, setSelectedCRM] = useState<CRMType>('salesforce');
+
+  useEffect(() => {
+    if (mode === 'edit' && companyToEdit) {
+      setNewName(companyToEdit.name);
+      setSelectedCRM(companyToEdit.crmType);
+    }
+  }, [mode, companyToEdit]);
+
+  const handleSaveClick = () => {
+    onSave({ name: newName, crmType: selectedCRM });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-slate-900/80 border border-slate-800 rounded-[2rem] p-8 max-w-lg w-full shadow-2xl backdrop-blur-xl"
+      >
+        <h2 className="text-lg font-bold text-white mb-6">
+          {mode === 'new' ? 'Cadastrar Novo Ambiente' : 'Editar Ambiente'}
+        </h2>
+        <div className="space-y-6">
+          <div>
+            <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-2">Nome da Organização</label>
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="Ex: Global Logistics Inc."
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all"
+            />
+          </div>
+          <div>
+            <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-4">Pipeline de Entrada (CRM)</label>
+            <div className="grid grid-cols-3 gap-4">
+              {CRM_TEMPLATES.map(crm => (
+                <motion.button
+                  key={crm.id}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSelectedCRM(crm.id as CRMType)}
+                  className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center space-y-3 ${
+                    selectedCRM === crm.id ? 'border-blue-500 bg-blue-500/5' : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800'
+                  }`}
+                >
+                  <span className="text-2xl">{crm.icon}</span>
+                  <span className="text-[12px] font-black uppercase text-slate-400">{crm.name}</span>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+          <div className="flex space-x-4 pt-4">
             <motion.button
-              key={crm.id}
-              whileHover={{ scale: 1.02, y: -2 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setSelectedCRM(crm.id as CRMType)}
-              className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center space-y-3 ${
-                selectedCRM === crm.id ? 'border-blue-500 bg-blue-500/5' : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800'
-              }`}
+              onClick={handleSaveClick}
+              className="flex-1 bg-blue-600 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-500 transition-all text-white"
             >
-              <span className="text-2xl">{crm.icon}</span>
-              <span className="text-[12px] font-black uppercase text-slate-400">{crm.name}</span>
+              {mode === 'new' ? 'Ativar Ambiente' : 'Salvar Alterações'}
             </motion.button>
-          ))}
+            <button onClick={onClose} className="px-8 bg-slate-800 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-700 transition-all">Cancelar</button>
+          </div>
         </div>
-      </div>
-      <div className="flex space-x-4 pt-4">
-        <motion.button 
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onSave} 
-          className="flex-1 bg-blue-600 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-500 transition-all text-white"
-        >
-          Salvar Alterações
-        </motion.button>
-        <button onClick={onCancel} className="px-8 bg-slate-800 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-700 transition-all">Cancelar</button>
-      </div>
+      </motion.div>
     </div>
-  </div>
-);
+  );
+};
 
 
 const CompanyManager: React.FC = () => {
@@ -73,23 +96,11 @@ const CompanyManager: React.FC = () => {
   const [formOpenFor, setFormOpenFor] = useState<'new' | Company | null>(null);
   const [deletingCompany, setDeletingCompany] = useState<Company | null>(null);
   
-  const [newName, setNewName] = useState('');
-  const [selectedCRM, setSelectedCRM] = useState<CRMType>('salesforce');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    if (formOpenFor && formOpenFor !== 'new') {
-      setNewName(formOpenFor.name);
-      setSelectedCRM(formOpenFor.crmType);
-    } else {
-      setNewName('');
-      setSelectedCRM('salesforce');
-    }
-  }, [formOpenFor]);
-
-  const handleSave = () => {
-    if (!newName || !formOpenFor) return;
+  
+  const handleSave = ({ name, crmType }: { name: string; crmType: CRMType }) => {
+    if (!name || !formOpenFor) return;
     
     if (formOpenFor === 'new') {
       const newId = `comp-${Date.now()}`;
@@ -98,21 +109,18 @@ const CompanyManager: React.FC = () => {
       
       addCompany({
         id: newId,
-        name: newName,
+        name: name,
         color: randomColor,
-        crmType: selectedCRM,
+        crmType: crmType,
         internalSchema: { ...globalSchema },
         outputTemplate: { ...outputTemplate },
         crmConfig: {
-          aiInstructions: `Instruções padrão para mapeamento do ${selectedCRM}...`,
+          aiInstructions: `Instruções padrão para mapeamento do ${crmType}...`,
           sourceJson: "{\n  \"example\": \"data\"\n}"
         }
       });
     } else {
-      updateCompany(formOpenFor.id, {
-        name: newName,
-        crmType: selectedCRM
-      });
+      updateCompany(formOpenFor.id, { name, crmType });
     }
     setFormOpenFor(null);
   };
@@ -181,131 +189,63 @@ const CompanyManager: React.FC = () => {
           </div>
         </div>
 
-        <AnimatePresence>
-          {formOpenFor === 'new' && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0, scale: 0.95 }}
-              animate={{ opacity: 1, height: 'auto', scale: 1 }}
-              exit={{ opacity: 0, height: 0, scale: 0.95 }}
-              className="bg-slate-900/40 border border-slate-800 rounded-[2rem] p-8 mb-10 backdrop-blur-xl overflow-hidden shadow-2xl"
-            >
-              <h2 className="text-lg font-bold text-white mb-6">Cadastrar Novo Ambiente</h2>
-              <div className="space-y-6">
-                <div>
-                  <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-2">Nome da Organização</label>
-                  <input 
-                    type="text" 
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    placeholder="Ex: Global Logistics Inc."
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 outline-none focus:ring-2 focus:ring-blue-500/30 transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-4">Pipeline de Entrada (CRM)</label>
-                  <div className="grid grid-cols-3 gap-4">
-                    {CRM_TEMPLATES.map(crm => (
-                      <motion.button
-                        key={crm.id}
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => setSelectedCRM(crm.id as CRMType)}
-                        className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center space-y-3 ${
-                          selectedCRM === crm.id ? 'border-blue-500 bg-blue-500/5' : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800'
-                        }`}
-                      >
-                        <span className="text-2xl">{crm.icon}</span>
-                        <span className="text-[12px] font-black uppercase text-slate-400">{crm.name}</span>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex space-x-4 pt-4">
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleSave} 
-                    className="flex-1 bg-blue-600 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-500 transition-all text-white"
-                  >
-                    Ativar Ambiente
-                  </motion.button>
-                  <button onClick={() => setFormOpenFor(null)} className="px-8 bg-slate-800 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-700 transition-all">Cancelar</button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <motion.div 
           layout
           className="grid gap-6 items-start"
         >
-          {paginatedCompanies.map((comp) => (
-            <motion.div layout="position" key={comp.id}>
-              <motion.button
-                onClick={() => setActiveCompanyById(comp.id)}
-                className={`group w-full bg-slate-900/30 border ${comp.id === activeCompany?.id ? 'border-blue-500/40 shadow-[0_0_30px_rgba(59,130,246,0.1)]' : 'border-slate-800/60'} rounded-[1.5rem] p-6 flex items-center justify-between transition-all text-left`}
-                whileHover={{ x: 5, backgroundColor: 'rgba(15, 23, 42, 0.4)' }}
+          <AnimatePresence>
+            {paginatedCompanies.map((comp) => (
+              <motion.div
+                layout="position"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                key={comp.id}
               >
-                <div className="flex items-center space-x-6">
-                  <motion.div 
-                    layoutId={`company-avatar-${comp.id}`}
-                    className={`w-14 h-14 rounded-2xl ${comp.color} flex items-center justify-center text-xl font-black text-white shadow-2xl shadow-black/40`}
-                  >
-                    {comp.name[0]}
-                  </motion.div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{comp.name}</h3>
-                    <div className="flex items-center mt-1 space-x-3">
-                      <span className="text-[12px] text-slate-600 font-black uppercase tracking-widest">TENANT-ID: {comp.id.substring(0,8)}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-800"></span>
-                      <div className="flex items-center space-x-1">
-                         <span className="text-[12px] text-blue-500/80 font-black uppercase tracking-widest">CORE:</span>
-                         <span className="text-[12px] text-slate-400 font-bold uppercase">{comp.crmType}</span>
+                <button
+                  onClick={() => setActiveCompanyById(comp.id)}
+                  className={`group w-full bg-slate-900/30 border ${comp.id === activeCompany?.id ? 'border-blue-500/40 shadow-[0_0_30px_rgba(59,130,246,0.1)]' : 'border-slate-800/60'} rounded-[1.5rem] p-6 flex items-center justify-between transition-all text-left`}
+                >
+                  <div className="flex items-center space-x-6">
+                    <motion.div 
+                      layoutId={`company-avatar-${comp.id}`}
+                      className={`w-14 h-14 rounded-2xl ${comp.color} flex items-center justify-center text-xl font-black text-white shadow-2xl shadow-black/40`}
+                    >
+                      {comp.name[0]}
+                    </motion.div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{comp.name}</h3>
+                      <div className="flex items-center mt-1 space-x-3">
+                        <span className="text-[12px] text-slate-600 font-black uppercase tracking-widest">TENANT-ID: {comp.id.substring(0,8)}</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-800"></span>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-[12px] text-blue-500/80 font-black uppercase tracking-widest">CORE:</span>
+                          <span className="text-[12px] text-slate-400 font-bold uppercase">{comp.crmType}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                        onClick={(e) => { e.stopPropagation(); setFormOpenFor(comp); }}
-                        className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-800/50 hover:text-blue-400 transition-colors"
-                        aria-label={`Editar ${comp.name}`}
-                    >
-                        <Icons.Edit />
-                    </button>
-                    <button
-                        onClick={(e) => { e.stopPropagation(); setDeletingCompany(comp); }}
-                        className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-800/50 hover:text-rose-400 transition-colors"
-                        aria-label={`Excluir ${comp.name}`}
-                    >
-                        <Icons.Trash />
-                    </button>
-                </div>
-              </motion.button>
-              
-              <AnimatePresence>
-                {formOpenFor && typeof formOpenFor === 'object' && formOpenFor.id === comp.id && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="overflow-hidden"
-                  >
-                    <EditForm 
-                      onSave={handleSave} 
-                      onCancel={() => setFormOpenFor(null)}
-                      newName={newName}
-                      setNewName={setNewName}
-                      selectedCRM={selectedCRM}
-                      setSelectedCRM={setSelectedCRM}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                  <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                          onClick={(e) => { e.stopPropagation(); setFormOpenFor(comp); }}
+                          className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-800/50 hover:text-blue-400 transition-colors"
+                          aria-label={`Editar ${comp.name}`}
+                      >
+                          <Icons.Edit />
+                      </button>
+                      <button
+                          onClick={(e) => { e.stopPropagation(); setDeletingCompany(comp); }}
+                          className="p-2.5 rounded-xl text-slate-500 hover:bg-slate-800/50 hover:text-rose-400 transition-colors"
+                          aria-label={`Excluir ${comp.name}`}
+                      >
+                          <Icons.Trash />
+                      </button>
+                  </div>
+                </button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
         
         {filteredCompanies.length === 0 && (
@@ -344,6 +284,17 @@ const CompanyManager: React.FC = () => {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {formOpenFor && (
+          <CompanyFormModal
+            mode={formOpenFor === 'new' ? 'new' : 'edit'}
+            companyToEdit={formOpenFor === 'new' ? undefined : formOpenFor}
+            onSave={handleSave}
+            onClose={() => setFormOpenFor(null)}
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {deletingCompany && (
