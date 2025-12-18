@@ -7,14 +7,50 @@ export enum NodeType {
   OUTPUT_GENERATOR = 'OUTPUT_GENERATOR'
 }
 
+export type CRMType = 'salesforce' | 'hubspot' | 'custom' | 'none';
+
 export enum IntegrationStatus {
-  CONNECTED = 'CONNECTED',
   DISCONNECTED = 'DISCONNECTED',
   CONNECTING = 'CONNECTING',
-  ERROR = 'ERROR'
+  CONNECTED = 'CONNECTED',
+  ERROR = 'ERROR',
+  EXPIRING = 'EXPIRING'
 }
 
-export type CRMType = 'salesforce' | 'hubspot' | 'custom' | 'none';
+export interface Header {
+  id: string;
+  key: string;
+  value: string;
+}
+
+export interface OutputExecution {
+  id: string;
+  timestamp: string;
+  status: number;
+  payload: any;
+  response: any;
+  duration: string;
+}
+
+export interface OutputRoute {
+  id: string;
+  name: string;
+  url: string;
+  method: 'POST' | 'PUT' | 'GET';
+  headers: Header[];
+  bodyTemplate: string;
+  history?: OutputExecution[];
+}
+
+export interface Credential {
+  id: string;
+  alias: string;
+  providerId: string;
+  status: IntegrationStatus;
+  lastTested: string;
+  expiresAt?: string;
+  credentialId: string;
+}
 
 export interface Company {
   id: string;
@@ -23,6 +59,8 @@ export interface Company {
   crmType: CRMType;
   internalSchema?: any;
   outputTemplate?: any;
+  outputRoutes?: OutputRoute[];
+  credentials?: Credential[];
   crmConfig?: {
     webhookUrl?: string;
     aiInstructions?: string;
@@ -30,34 +68,39 @@ export interface Company {
   };
 }
 
+export interface EnvVar {
+  id: string;
+  key: string;
+  value: string;
+  isSecret: boolean;
+}
+
 export interface Integration {
   id: string;
   name: string;
   type: string;
   icon: string;
-  status?: IntegrationStatus;
-  configFields: ConfigField[];
+  configFields: {
+    label: string;
+    key: string;
+    type: string;
+    placeholder: string;
+  }[];
 }
 
-export interface ConfigField {
-  label: string;
-  key: string;
-  type: 'text' | 'password' | 'select';
-  placeholder?: string;
-  options?: { label: string; value: string }[];
+export interface ExecutionStep {
+  name: string;
+  status: 'COMPLETED' | 'FAILED' | 'PENDING';
+  timestamp: string;
+  payloadIn: any;
+  payloadOut: any;
 }
 
-export interface FlowNodeData {
-  label: string;
-  icon: string;
-  nodeType: NodeType;
-  connected?: boolean;
-  integrationId?: string;
-  description?: string;
-}
-
-export interface MappingPair {
-  source: string;
-  target: string;
-  transformation?: string;
+export interface ExecutionLog {
+  id: string;
+  sessionId: string;
+  timestamp: string;
+  duration: string;
+  status: 'SUCCESS' | 'FAILURE' | 'RUNNING';
+  steps: ExecutionStep[];
 }
