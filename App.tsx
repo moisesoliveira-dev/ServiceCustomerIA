@@ -1,3 +1,4 @@
+
 import React, { useState, createContext, useContext } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -12,6 +13,7 @@ import GlobalSettingsView from './components/GlobalSettingsView';
 import CompanyManager from './components/CompanyManager';
 import StateMonitor from './components/StateMonitor';
 import { Company, EnvVar, UserPermission } from './types';
+import Login from './components/Login';
 
 const DEFAULT_GLOBAL_SCHEMA = {
   "internal_id": "string",
@@ -33,6 +35,9 @@ interface AppContextType {
   activeCompany: Company | null;
   globalVars: EnvVar[];
   permissions: UserPermission[];
+  isAuthenticated: boolean;
+  login: (email: string, pass: string) => Promise<void>;
+  logout: () => void;
   setActiveCompanyById: (id: string | null) => void;
   updateCompany: (id: string, updates: Partial<Company>) => void;
   addCompany: (company: Company) => void;
@@ -57,9 +62,10 @@ export const useApp = () => {
 const INITIAL_COMPANIES: Company[] = [
   { 
     id: '1', name: 'Nexus Core', color: 'bg-blue-600', crmType: 'salesforce',
-    internalSchema: { ...DEFAULT_GLOBAL_SCHEMA },
     outputRoutes: [
-      { id: 'out-1', name: 'Primary Webhook', url: 'https://api.nexus.io/v1/webhook', method: 'POST', headers: [{ id: 'h1', key: 'Authorization', value: 'Bearer demo_token' }], bodyTemplate: '{\n  "event": "customer_resolved",\n  "data": {{payload}}\n}' }
+      { id: 'out-1', name: 'Primary Webhook', url: 'https://api.nexus.io/v1/webhook', method: 'POST', headers: [{ id: 'h1', key: 'Authorization', value: 'Bearer demo_token' }], bodyTemplate: '{\n  "event": "customer_resolved",\n  "data": {{payload}}\n}', group: 'General' },
+      { id: 'out-2', name: 'Notify Billing Channel', url: 'https://hooks.slack.com/services/...', method: 'POST', headers: [], bodyTemplate: '{\n  "text": "New billing inquiry resolved for {{customer.name}}"\n}', group: 'Slack Internal' },
+      { id: 'out-3', name: 'Archive Case File', url: 'https://www.googleapis.com/upload/drive/v3/files', method: 'POST', headers: [], bodyTemplate: '{\n  "name": "case-{{conversation.id}}.txt",\n  "parents": ["..."],\n  "mimeType": "text/plain"\n}', group: 'Google Drive Asset' }
     ]
   }
 ];
@@ -75,14 +81,53 @@ const INITIAL_PERMISSIONS: UserPermission[] = [
   { id: 'perm-3', user: 'viewer@nexus.ai', role: 'AUDITOR', scope: 'GLOBAL_LOGS' }
 ];
 
+const AppLayout = () => (
+  <div className="flex h-screen w-full overflow-hidden bg-[#02040a] text-slate-200">
+    <Sidebar />
+    <main className="flex-1 flex flex-col relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/companies" element={<CompanyManager />} />
+          <Route path="/flow" element={<FlowBuilder />} />
+          <Route path="/flow/monitor" element={<StateMonitor />} />
+          <Route path="/logs" element={<ExecutionLogsView />} />
+          <Route path="/mapping" element={<JsonMapperView />} />
+          <Route path="/output" element={<OutputGeneratorView />} />
+          <Route path="/integrations" element={<IntegrationHub />} />
+          <Route path="/settings" element={<GlobalSettingsView />} />
+        </Routes>
+      </AnimatePresence>
+    </main>
+  </div>
+);
+
 export default function App() {
   const [companies, setCompanies] = useState<Company[]>(INITIAL_COMPANIES);
   const [activeCompanyId, setActiveCompanyId] = useState<string | null>(INITIAL_COMPANIES.length > 0 ? INITIAL_COMPANIES[0].id : null);
   const [globalVars, setGlobalVars] = useState<EnvVar[]>(INITIAL_VARS);
   const [permissions, setPermissions] = useState<UserPermission[]>(INITIAL_PERMISSIONS);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const activeCompany = companies.find(c => c.id === activeCompanyId) || null;
 
+  const login = (email: string, pass: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (email === 'admin@nexus.ai' && pass === 'password') {
+          setIsAuthenticated(true);
+          resolve();
+        } else {
+          reject(new Error('Credenciais inválidas.'));
+        }
+      }, 1000);
+    });
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+  };
+  
   const updateCompany = (id: string, updates: Partial<Company>) => {
     setCompanies(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
   };
@@ -129,6 +174,9 @@ export default function App() {
       activeCompany, 
       globalVars, 
       permissions,
+      isAuthenticated,
+      login,
+      logout,
       setActiveCompanyById: setActiveCompanyId, 
       updateCompany, 
       addCompany, 
@@ -143,24 +191,7 @@ export default function App() {
       outputTemplate: DEFAULT_OUTPUT_TEMPLATE
     }}>
       <HashRouter>
-        <div className="flex h-screen w-full overflow-hidden bg-[#02040a] text-slate-200">
-          <Sidebar />
-          <main className="flex-1 flex flex-col relative overflow-hidden">
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/companies" element={<CompanyManager />} />
-                <Route path="/flow" element={<FlowBuilder />} />
-                <Route path="/flow/monitor" element={<StateMonitor />} />
-                <Route path="/logs" element={<ExecutionLogsView />} />
-                <Route path="/mapping" element={<JsonMapperView />} />
-                <Route path="/output" element={<OutputGeneratorView />} />
-                <Route path="/integrations" element={<IntegrationHub />} />
-                <Route path="/settings" element={<GlobalSettingsView />} />
-              </Routes>
-            </AnimatePresence>
-          </main>
-        </div>
+         {isAuthenticated ? <AppLayout /> : <Login />}
       </HashRouter>
     </AppContext.Provider>
   );

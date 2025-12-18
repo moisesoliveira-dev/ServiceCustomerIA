@@ -40,6 +40,7 @@ export interface OutputRoute {
   headers: Header[];
   bodyTemplate: string;
   history?: OutputExecution[];
+  group?: string;
 }
 
 export interface Credential {

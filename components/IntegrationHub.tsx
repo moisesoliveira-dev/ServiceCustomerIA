@@ -70,7 +70,7 @@ const IntegrationHub: React.FC = () => {
   if (!activeCompany) return null;
 
   return (
-    <div className="flex-1 p-10 bg-[#02040a] overflow-y-auto custom-scrollbar">
+    <div className="flex-1 px-10 pt-10 pb-20 bg-[#02040a] overflow-y-auto custom-scrollbar">
       <SectionHeader 
         title="Credential Manager" 
         subtitle="Nexus Vault: Gestão de segredos e conectividade de agentes workforce"

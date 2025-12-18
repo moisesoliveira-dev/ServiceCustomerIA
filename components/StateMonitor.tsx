@@ -130,7 +130,7 @@ const StateMonitor: React.FC = () => {
         {/* Detail Content */}
         <div className="flex-1 p-10 overflow-y-auto bg-slate-950/40">
           {selectedSession ? (
-            <div className="max-w-4xl mx-auto space-y-10">
+            <div className="max-w-4xl mx-auto space-y-10 pb-10">
               {/* Pipeline Status */}
               <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-10 shadow-2xl backdrop-blur-md">
                 <div className="flex justify-between items-center mb-12">

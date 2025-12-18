@@ -52,7 +52,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="flex-1 p-8 bg-[#0b1120] overflow-y-auto custom-scrollbar">
+    <div className="flex-1 p-10 pb-20 bg-[#0b1120] overflow-y-auto custom-scrollbar">
       <div className="max-w-6xl mx-auto">
         <SectionHeader 
           title="Nexus Command Center" 

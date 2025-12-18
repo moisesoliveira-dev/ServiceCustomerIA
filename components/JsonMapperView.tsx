@@ -107,10 +107,10 @@ const JsonMapperView: React.FC = () => {
       <MapperHeader company={activeCompany} isAdmin={isAdminMode} toggleAdmin={() => setIsAdminMode(!isAdminMode)} runTest={runAiTest} loading={isLoading} />
       <MapperTabs active={activeTab} onSelect={setActiveTab} />
 
-      <div className="flex-1 overflow-hidden p-10 flex gap-8 custom-scrollbar overflow-y-auto">
+      <div className="flex-1 px-10 pt-10 flex gap-8 custom-scrollbar overflow-y-auto">
         {activeTab === 'config' ? (
           <>
-            <div className="flex-1 flex flex-col space-y-6">
+            <div className="flex-1 flex flex-col space-y-6 pb-10">
               <CodeEditor 
                 label={`Payload Exemplo (${activeCompany.crmType})`} 
                 icon={<Icons.Transformer />} 
@@ -119,7 +119,7 @@ const JsonMapperView: React.FC = () => {
                 readOnly={isAdminMode} 
               />
             </div>
-            <div className="flex-1 flex flex-col space-y-6">
+            <div className="flex-1 flex flex-col space-y-6 pb-10">
               <div className={`bg-slate-900 border rounded-[2rem] p-8 transition-opacity ${isAdminMode ? 'opacity-30 pointer-events-none' : 'border-slate-800'}`}>
                  <h3 className="text-[12px] font-black text-slate-500 uppercase tracking-widest mb-6">Prompt de Mapeamento (IA Logic)</h3>
                  <textarea className="w-full h-44 bg-slate-950 border border-slate-800 rounded-2xl p-6 text-sm text-slate-300 outline-none focus:ring-1 ring-blue-500/30" value={config.aiInstructions} onChange={(e) => updateCompany(activeCompany.id, { crmConfig: { ...config, aiInstructions: e.target.value } })} placeholder="Prompt para IA..." />

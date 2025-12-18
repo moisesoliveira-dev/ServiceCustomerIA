@@ -170,11 +170,11 @@ const LibrarySidebar: React.FC = () => {
 const FlowBuilderComponent: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [editingNode, setEditingNode] = useState<Node | null>(null);
+  const [isDeploying, setIsDeploying] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     const initialNodes: Node[] = [
@@ -193,6 +193,13 @@ const FlowBuilderComponent: React.FC = () => {
     setNodes(initialNodes);
     setEdges(initialEdges);
   }, []);
+  
+  useEffect(() => {
+    if (showSuccessModal) {
+      const timer = setTimeout(() => setShowSuccessModal(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessModal]);
 
   const onConnect = useCallback((params: Connection) => {
     const sourceNode = nodes.find(n => n.id === params.source);
@@ -249,9 +256,7 @@ const FlowBuilderComponent: React.FC = () => {
         icon: integration.icon, 
         nodeType: NodeType.AGENT_WORKER, 
         connected: false,
-        // Adiciona um identificador único da integração para buscar os campos de config
         providerId: integration.id,
-        // Inicializa o objeto de config
         config: {}
       },
     };
@@ -270,7 +275,6 @@ const FlowBuilderComponent: React.FC = () => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === nodeId) {
-          // Mantém as propriedades existentes e mescla as novas
           const updatedData = { ...node.data, ...newData };
           return { ...node, data: updatedData };
         }
@@ -278,6 +282,14 @@ const FlowBuilderComponent: React.FC = () => {
       })
     );
     setEditingNode(null);
+  };
+  
+  const handleDeploy = () => {
+    setIsDeploying(true);
+    setTimeout(() => {
+      setIsDeploying(false);
+      setShowSuccessModal(true);
+    }, 2000);
   };
 
 
@@ -298,12 +310,14 @@ const FlowBuilderComponent: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="flex bg-slate-900/50 border border-slate-800/60 rounded-2xl p-1.5">
-               <button onClick={() => navigate('/flow')} className={`px-5 py-2 text-[12px] font-black rounded-xl shadow-lg uppercase tracking-wider transition-colors ${location.pathname === '/flow' ? 'bg-slate-800 text-blue-400' : 'text-slate-600 hover:text-white'}`}>Designer</button>
-               <button onClick={() => navigate('/flow/monitor')} className={`px-5 py-2 text-[12px] font-black rounded-xl uppercase tracking-wider transition-colors ${location.pathname === '/flow/monitor' ? 'bg-slate-800 text-blue-400' : 'text-slate-600 hover:text-white'}`}>Monitor</button>
-            </div>
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-6 py-2.5 text-xs font-black bg-blue-600 text-white rounded-xl shadow-xl shadow-blue-600/20 uppercase tracking-widest">
-              Deploy Protocol
+            <motion.button 
+              whileHover={{ scale: 1.05 }} 
+              whileTap={{ scale: 0.95 }} 
+              onClick={handleDeploy}
+              disabled={isDeploying}
+              className="px-6 py-2.5 text-xs font-black bg-blue-600 text-white rounded-xl shadow-xl shadow-blue-600/20 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isDeploying ? 'Deploying...' : 'Deploy Protocol'}
             </motion.button>
           </div>
         </header>
@@ -336,6 +350,26 @@ const FlowBuilderComponent: React.FC = () => {
             onSave={onNodeConfigSave}
             onClose={() => setEditingNode(null)}
           />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-slate-900/80 border border-emerald-500/20 rounded-[2rem] p-8 max-w-md w-full shadow-2xl text-center"
+            >
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 10 }} className="w-16 h-16 bg-emerald-500/10 border-2 border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+                <Icons.Check />
+              </motion.div>
+              <h2 className="text-xl font-bold text-white mt-6">Deployment Successful</h2>
+              <p className="text-slate-400 mt-2 text-sm">
+                O novo protocolo de orquestração foi ativado com sucesso no ambiente de produção.
+              </p>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
